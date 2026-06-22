@@ -167,8 +167,8 @@ Output files:
 | README with setup | `README.md` |
 | Implementation explanation | This document + README |
 | Screenshots | `docs/screenshots/` (capture before final submit) |
-| Android APK | `dist/pritech-task-manager.apk` |
-| iOS IPA | `dist/pritech-task-manager.ipa` |
+| Android APK | https://github.com/enisgjinii/pritech-task-manager/releases/latest |
+| iOS IPA | https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager/builds |
 
 ---
 

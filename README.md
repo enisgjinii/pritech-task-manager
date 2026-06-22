@@ -173,6 +173,16 @@ npm run check        # typecheck + lint + format:check
 
 APK and IPA builds run on [Expo EAS](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager) — no local Java, Gradle, or Xcode required.
 
+### Download Android APK (ready)
+
+Install the latest release on any Android device:
+
+**https://github.com/enisgjinii/pritech-task-manager/releases/latest**
+
+Download `pritech-task-manager.apk`, enable “Install from unknown sources” if prompted, and open the file to install.
+
+### Build from source
+
 ```bash
 npm run build:android:apk   # Start Android APK build in the cloud
 npm run build:ios:ipa       # First iOS build — run in your terminal (Apple login required)
@@ -263,8 +273,8 @@ Data persists after app reload. No backend or authentication is used.
 | README with setup instructions | This file |
 | Short explanation of what was implemented | [What Was Implemented](#what-was-implemented) |
 | Screenshots or screen recording | `docs/screenshots/` |
-| Android APK | `dist/pritech-task-manager.apk` (via EAS build) |
-| iOS IPA | `dist/pritech-task-manager.ipa` (via EAS build) |
+| Android APK | [GitHub Release v1.0.0](https://github.com/enisgjinii/pritech-task-manager/releases/latest) — download `pritech-task-manager.apk` |
+| iOS IPA | [EAS builds](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager/builds) (requires Apple Developer setup) |
 
 For a detailed submission write-up, see [`docs/PRITECH_SUBMISSION.md`](docs/PRITECH_SUBMISSION.md).
 

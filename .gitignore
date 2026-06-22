@@ -9,6 +9,10 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Release binaries (published via GitHub Releases)
+*.apk
+*.ipa
+
 # Native
 .kotlin/
 *.orig.*
