@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -31,7 +31,8 @@ import {
 import ApiWidgetCard from '../components/ApiWidgetCard';
 import { FadeInView } from '../components/motion';
 import ScreenHeader from '../components/ScreenHeader';
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { addStoredTask, mergeImportedTasks } from '../storage/taskStorage';
 import { TabParamList, Task } from '../types/task';
 import { decodeHtml, generateId } from '../utils/date';
@@ -69,6 +70,8 @@ function useApiCard<T>(loader: () => Promise<T>) {
 
 export default function ApiHubScreen() {
   const navigation = useNavigation<Nav>();
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
@@ -446,7 +449,8 @@ export default function ApiHubScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: 16, paddingBottom: 32 },
   subheading: {
@@ -488,4 +492,5 @@ const styles = StyleSheet.create({
   pokemon: { width: 80, height: 80, marginBottom: 8 },
   dogImage: { width: '100%', height: 160, borderRadius: 10 },
   mealImage: { width: '100%', height: 140, borderRadius: 10, marginBottom: 8 },
-});
+  });
+}

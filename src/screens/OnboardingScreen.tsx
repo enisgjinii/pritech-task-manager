@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -12,7 +12,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import PrimaryButton from '../components/PrimaryButton';
 import { FadeInView, SlidePanel } from '../components/motion';
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { setOnboardingComplete } from '../storage/onboardingStorage';
 import { RootStackParamList } from '../types/task';
 
@@ -38,6 +39,8 @@ const SLIDES = [
 ];
 
 export default function OnboardingScreen({ navigation }: Props) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [step, setStep] = useState(0);
   const slide = SLIDES[step];
   const isFirst = step === 0;
@@ -136,7 +139,8 @@ export default function OnboardingScreen({ navigation }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -213,4 +217,5 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 0,
   },
-});
+  });
+}

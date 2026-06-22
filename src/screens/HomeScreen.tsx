@@ -26,7 +26,8 @@ import ApiWidgetCard from '../components/ApiWidgetCard';
 import EmptyState from '../components/EmptyState';
 import { FadeInView, ScaleInView } from '../components/motion';
 import TaskCard from '../components/TaskCard';
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import {
   getStoredTasks,
   toggleStoredTask,
@@ -38,6 +39,8 @@ type Nav = NativeStackNavigationProp<TasksStackParamList, 'Home'>;
 
 export default function HomeScreen() {
   const navigation = useNavigation<Nav>();
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<TaskFilter>('all');
@@ -159,7 +162,7 @@ export default function HomeScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <FlatList
         data={filtered}
         keyExtractor={(item) => item.id}
@@ -281,14 +284,16 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  list: { padding: 16, paddingBottom: 24 },
+  list: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24 },
   heading: {
     fontSize: 28,
     fontWeight: '700',
     color: colors.text,
     marginBottom: 16,
+    marginTop: 0,
   },
   widgetText: { fontSize: 14, color: colors.text, lineHeight: 22 },
   search: {
@@ -317,7 +322,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   filterText: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
-  filterTextActive: { color: '#FFFFFF' },
+  filterTextActive: { color: colors.headerText },
   count: {
     fontSize: 13,
     color: colors.textSecondary,
@@ -325,7 +330,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     justifyContent: 'center',
     padding: 24,
   },
@@ -356,5 +361,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
   },
-  modalBtnText: { color: '#FFF', fontWeight: '600' },
-});
+  modalBtnText: { color: colors.headerText, fontWeight: '600' },
+  });
+}

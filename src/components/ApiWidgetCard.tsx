@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -7,7 +8,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { StaggerInView } from './motion';
 
 interface ApiWidgetCardProps {
@@ -35,6 +37,9 @@ export default function ApiWidgetCard({
   onAction,
   animationIndex = 0,
 }: ApiWidgetCardProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <StaggerInView index={animationIndex} style={[styles.card, style]}>
       <View style={styles.header}>
@@ -66,63 +71,65 @@ export default function ApiWidgetCard({
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  headerText: { flex: 1 },
-  title: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-  refreshBtn: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  refreshText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.accent,
-  },
-  loader: { marginVertical: 12 },
-  error: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    lineHeight: 20,
-  },
-  actionBtn: {
-    marginTop: 10,
-    alignSelf: 'flex-start',
-    backgroundColor: colors.accentLight,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  actionText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.accent,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      marginBottom: 8,
+    },
+    headerText: { flex: 1 },
+    title: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: colors.text,
+    },
+    subtitle: {
+      fontSize: 12,
+      color: colors.textSecondary,
+      marginTop: 2,
+    },
+    refreshBtn: {
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+    },
+    refreshText: {
+      fontSize: 13,
+      fontWeight: '600',
+      color: colors.accent,
+    },
+    loader: { marginVertical: 12 },
+    error: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      lineHeight: 20,
+    },
+    actionBtn: {
+      marginTop: 10,
+      alignSelf: 'flex-start',
+      backgroundColor: colors.accentLight,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 8,
+    },
+    actionText: {
+      fontSize: 13,
+      fontWeight: '600',
+      color: colors.accent,
+    },
+  });
+}

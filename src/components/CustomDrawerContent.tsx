@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { resetToOnboarding } from '../navigation/navigationRef';
 import { clearAllAppCache } from '../storage/appCache';
 import { resetOnboarding } from '../storage/onboardingStorage';
@@ -29,6 +31,8 @@ const MENU_ITEMS: {
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
   const { navigation, state } = props;
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   const tabsRoute = state.routes.find((route) => route.name === 'Tabs');
   const tabState = tabsRoute?.state;
@@ -127,86 +131,88 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.surface,
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  logoWrap: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.background,
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 14,
-  },
-  logo: { width: 140, height: 40 },
-  appName: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 4,
-  },
-  tagline: {
-    fontSize: 13,
-    color: colors.textMuted,
-  },
-  menu: {
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingTop: 16,
-  },
-  sectionLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    marginBottom: 8,
-    marginLeft: 8,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    paddingVertical: 13,
-    paddingHorizontal: 12,
-    borderRadius: 10,
-    marginBottom: 4,
-  },
-  menuItemActive: {
-    backgroundColor: colors.accentLight,
-  },
-  menuLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.text,
-  },
-  menuLabelActive: {
-    color: colors.accent,
-    fontWeight: '600',
-  },
-  dangerLabel: { color: colors.error },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: 16,
-    marginHorizontal: 8,
-  },
-  footer: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  footerText: {
-    fontSize: 12,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.surface,
+    },
+    header: {
+      paddingHorizontal: 20,
+      paddingBottom: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    logoWrap: {
+      alignSelf: 'flex-start',
+      backgroundColor: colors.background,
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 14,
+    },
+    logo: { width: 140, height: 40 },
+    appName: {
+      fontSize: 18,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 4,
+    },
+    tagline: {
+      fontSize: 13,
+      color: colors.textMuted,
+    },
+    menu: {
+      flex: 1,
+      paddingHorizontal: 12,
+      paddingTop: 16,
+    },
+    sectionLabel: {
+      fontSize: 11,
+      fontWeight: '700',
+      color: colors.textMuted,
+      textTransform: 'uppercase',
+      letterSpacing: 0.6,
+      marginBottom: 8,
+      marginLeft: 8,
+    },
+    menuItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 14,
+      paddingVertical: 13,
+      paddingHorizontal: 12,
+      borderRadius: 10,
+      marginBottom: 4,
+    },
+    menuItemActive: {
+      backgroundColor: colors.accentLight,
+    },
+    menuLabel: {
+      fontSize: 16,
+      fontWeight: '500',
+      color: colors.text,
+    },
+    menuLabelActive: {
+      color: colors.accent,
+      fontWeight: '600',
+    },
+    dangerLabel: { color: colors.error },
+    divider: {
+      height: 1,
+      backgroundColor: colors.border,
+      marginVertical: 16,
+      marginHorizontal: 8,
+    },
+    footer: {
+      paddingHorizontal: 20,
+      paddingTop: 12,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+    },
+    footerText: {
+      fontSize: 12,
+      color: colors.textMuted,
+      textAlign: 'center',
+    },
+  });
+}

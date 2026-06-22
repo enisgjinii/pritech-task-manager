@@ -1,10 +1,11 @@
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import AddTaskFab from '../components/AddTaskFab';
 import DrawerToggleButton from '../components/DrawerToggleButton';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import AddTaskScreen from '../screens/AddTaskScreen';
 import ApiHubScreen from '../screens/ApiHubScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -20,16 +21,21 @@ import {
 const Tab = createNativeBottomTabNavigator<TabParamList>();
 const TasksStack = createNativeStackNavigator<TasksStackParamList>();
 
-const stackScreenOptions = {
-  headerStyle: { backgroundColor: colors.primary },
-  headerTintColor: '#FFFFFF',
-  headerTitleStyle: { fontWeight: '600' as const },
-  headerShadowVisible: false,
-  contentStyle: { backgroundColor: colors.background },
-  headerLeft: () => <DrawerToggleButton />,
-};
-
 function TasksStackNavigator() {
+  const { colors } = useTheme();
+
+  const stackScreenOptions = useMemo(
+    () => ({
+      headerStyle: { backgroundColor: colors.primary },
+      headerTintColor: colors.headerText,
+      headerTitleStyle: { fontWeight: '600' as const },
+      headerShadowVisible: false,
+      contentStyle: { backgroundColor: colors.background },
+      headerLeft: () => <DrawerToggleButton />,
+    }),
+    [colors],
+  );
+
   return (
     <TasksStack.Navigator screenOptions={stackScreenOptions}>
       <TasksStack.Screen
@@ -52,8 +58,10 @@ function TasksStackNavigator() {
 }
 
 export default function TabNavigator() {
+  const { colors } = useTheme();
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -17,7 +17,8 @@ import { fetchRandomUsers } from '../api/publicApis';
 import InputField from '../components/InputField';
 import { StaggerInView } from '../components/motion';
 import PrimaryButton from '../components/PrimaryButton';
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { addStoredTask } from '../storage/taskStorage';
 import { TaskOwner, TasksStackParamList } from '../types/task';
 import { generateId } from '../utils/date';
@@ -27,6 +28,8 @@ type AddTaskNav = NativeStackNavigationProp<TasksStackParamList, 'AddTask'>;
 
 export default function AddTaskScreen() {
   const navigation = useNavigation<AddTaskNav>();
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -138,7 +141,8 @@ export default function AddTaskScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
   content: { padding: 16 },
@@ -170,4 +174,5 @@ const styles = StyleSheet.create({
   personName: { fontSize: 14, fontWeight: '600', color: colors.text },
   personEmail: { fontSize: 12, color: colors.textSecondary },
   submit: { marginTop: 12 },
-});
+  });
+}

@@ -3,7 +3,7 @@ import { useNavigationState } from '@react-navigation/native';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import {
   isAddTaskScreenOpen,
   navigateToAddTask,
@@ -13,7 +13,7 @@ const TAB_BAR_HEIGHT = 49;
 
 export default function AddTaskFab() {
   const insets = useSafeAreaInsets();
-
+  const { colors } = useTheme();
   const isAddTaskOpen = useNavigationState(isAddTaskScreenOpen);
 
   if (isAddTaskOpen) return null;
@@ -22,14 +22,17 @@ export default function AddTaskFab() {
     <TouchableOpacity
       style={[
         styles.fab,
-        { bottom: insets.bottom + TAB_BAR_HEIGHT + 8 },
+        {
+          bottom: insets.bottom + TAB_BAR_HEIGHT + 8,
+          backgroundColor: colors.accent,
+        },
       ]}
       onPress={navigateToAddTask}
       activeOpacity={0.9}
       accessibilityRole="button"
       accessibilityLabel="Add new task"
     >
-      <Ionicons name="add" size={28} color="#FFFFFF" />
+      <Ionicons name="add" size={28} color={colors.headerText} />
     </TouchableOpacity>
   );
 }
@@ -41,13 +44,12 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
     ...Platform.select({
       ios: {
-        shadowColor: colors.accent,
+        shadowColor: '#00A89E',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.45,
         shadowRadius: 8,

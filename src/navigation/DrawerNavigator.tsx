@@ -1,13 +1,15 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import TabNavigator from './TabNavigator';
 import { DrawerParamList } from '../types/task';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
 export default function DrawerNavigator() {
+  const { colors } = useTheme();
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -18,7 +20,7 @@ export default function DrawerNavigator() {
           width: '82%',
           backgroundColor: colors.surface,
         },
-        overlayColor: 'rgba(10, 17, 40, 0.45)',
+        overlayColor: colors.overlay,
         swipeEdgeWidth: 48,
       }}
     >

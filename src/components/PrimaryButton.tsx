@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -6,7 +7,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 interface PrimaryButtonProps {
   title: string;
@@ -25,6 +27,8 @@ export default function PrimaryButton({
   variant = 'primary',
   style,
 }: PrimaryButtonProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const isDisabled = disabled || loading;
 
   return (
@@ -40,7 +44,9 @@ export default function PrimaryButton({
       activeOpacity={0.85}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' ? colors.primary : '#FFF'} />
+        <ActivityIndicator
+          color={variant === 'outline' ? colors.primary : colors.headerText}
+        />
       ) : (
         <Text style={[styles.text, styles[`${variant}Text`]]}>{title}</Text>
       )}
@@ -48,27 +54,29 @@ export default function PrimaryButton({
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 48,
-  },
-  primary: { backgroundColor: colors.primary },
-  secondary: { backgroundColor: colors.accent },
-  outline: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  danger: { backgroundColor: colors.error },
-  disabled: { opacity: 0.55 },
-  text: { fontSize: 16, fontWeight: '600' },
-  primaryText: { color: '#FFFFFF' },
-  secondaryText: { color: '#FFFFFF' },
-  outlineText: { color: colors.text },
-  dangerText: { color: '#FFFFFF' },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    button: {
+      paddingVertical: 14,
+      paddingHorizontal: 18,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: 48,
+    },
+    primary: { backgroundColor: colors.primary },
+    secondary: { backgroundColor: colors.accent },
+    outline: {
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    danger: { backgroundColor: colors.error },
+    disabled: { opacity: 0.55 },
+    text: { fontSize: 16, fontWeight: '600' },
+    primaryText: { color: colors.headerText },
+    secondaryText: { color: colors.headerText },
+    outlineText: { color: colors.text },
+    dangerText: { color: colors.headerText },
+  });
+}

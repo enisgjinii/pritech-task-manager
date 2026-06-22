@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -19,7 +19,8 @@ import ApiWidgetCard from '../components/ApiWidgetCard';
 import { StaggerInView } from '../components/motion';
 import PrimaryButton from '../components/PrimaryButton';
 import StatusBadge from '../components/StatusBadge';
-import { colors } from '../constants/colors';
+import { ThemeColors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import {
   deleteStoredTask,
   getStoredTasks,
@@ -34,6 +35,8 @@ type Route = RouteProp<TasksStackParamList, 'TaskDetails'>;
 export default function TaskDetailsScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { taskId } = route.params;
 
   const [task, setTask] = useState<Task | null>(null);
@@ -202,7 +205,8 @@ export default function TaskDetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   loading: { textAlign: 'center', marginTop: 40, color: colors.textSecondary },
   content: { padding: 16, gap: 12 },
@@ -242,4 +246,5 @@ const styles = StyleSheet.create({
   description: { fontSize: 16, color: colors.text, lineHeight: 24 },
   owner: { marginTop: 12, fontSize: 13, color: colors.accent },
   helperText: { fontSize: 14, color: colors.text, lineHeight: 22 },
-});
+  });
+}
