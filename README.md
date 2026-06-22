@@ -1,56 +1,96 @@
-# Welcome to your Expo app 👋
+# PRITECH Task Manager
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A clean, simple React Native mobile application for managing personal tasks. Built as a technical demonstration project showcasing React Native fundamentals, TypeScript, navigation, local storage, and API integration.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Task List** — View all tasks with title, description preview, completion status, and created date
+- **Add Task** — Form with title and description fields, auto-generated date and default active status
+- **Input Validation** — Required fields with minimum length checks and inline error messages
+- **Toggle Completion** — Mark tasks complete/incomplete from list or details screen
+- **Delete Task** — Remove tasks with confirmation dialog
+- **Task Details** — Full task view with status toggle and delete actions
+- **Search** — Real-time, case-insensitive title search
+- **Filter** — Filter by All, Active, or Completed (works with search)
+- **Local Storage** — Tasks persist via AsyncStorage across app reloads
+- **Motivational Quote** — Random quote from [Quotable API](https://api.quotable.io) with loading and error states
+
+## Tech Stack
+
+- React Native
+- TypeScript
+- Expo SDK 56
+- React Navigation (Native Stack)
+- AsyncStorage
+- Functional components and React hooks
+
+## Setup Instructions
+
+1. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Start the development server**
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+3. **Run the app**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   - Press `i` for iOS Simulator
+   - Press `a` for Android Emulator
+   - Scan the QR code with **Expo Go** on a physical device
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Public API Usage
 
-## Get a fresh project
+The app fetches a random motivational quote from `https://api.quotable.io/random` on the task list screen. The quote card shows:
 
-When you're ready, run:
+- Quote text and author on success
+- A loading spinner while fetching
+- Fallback message *"Could not load quote. Stay productive today."* on failure
+- A refresh button to fetch a new quote
 
-```bash
-npm run reset-project
+No API key is required. The endpoint is called over HTTPS with standard `fetch`.
+
+## Implementation Overview
+
+### Project Structure
+
+```
+src/
+  components/     Reusable UI (TaskCard, QuoteCard, FilterTabs, etc.)
+  screens/        TaskListScreen, AddTaskScreen, TaskDetailsScreen
+  navigation/     React Navigation stack setup
+  types/          TypeScript interfaces
+  utils/          AsyncStorage helpers and date formatting
+  constants/      Color palette
+  services/       Quote API fetch logic
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Data Model
 
-### Other setup steps
+Each task is stored as:
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```typescript
+{
+  id: string;
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: string; // ISO date string
+}
+```
 
-## Learn more
+### Key Design Decisions
 
-To learn more about developing your project with Expo, look at the following resources:
+- **AsyncStorage** — All CRUD operations go through utility functions in `src/utils/storage.ts`, keeping persistence logic centralized
+- **Screen focus refresh** — Task list and details screens reload data when focused, ensuring UI stays in sync after navigation
+- **Combined search + filter** — Filtering is applied in a single `useMemo` so search and status filters work together
+- **Validation on submit** — Form validation runs before save; errors display below each input field
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## License
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+See [LICENSE](LICENSE).
