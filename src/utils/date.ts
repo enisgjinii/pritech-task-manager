@@ -1,7 +1,6 @@
 export function formatDate(isoString: string): string {
   const date = new Date(isoString);
   if (Number.isNaN(date.getTime())) return 'Unknown date';
-
   return date.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
@@ -16,4 +15,13 @@ export function generateId(): string {
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength).trim()}…`;
+}
+
+export function decodeHtml(text: string): string {
+  return text
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 }

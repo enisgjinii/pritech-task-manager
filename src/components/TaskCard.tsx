@@ -1,15 +1,9 @@
-import { StyleSheet, View } from 'react-native';
-import {
-  Card,
-  Checkbox,
-  Chip,
-  IconButton,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { Task } from '../types/Task';
+import { colors } from '../constants/colors';
+import { Task } from '../types/task';
 import { formatDate, truncateText } from '../utils/date';
+import StatusBadge from './StatusBadge';
 
 interface TaskCardProps {
   task: Task;
@@ -24,157 +18,119 @@ export default function TaskCard({
   onToggle,
   onDelete,
 }: TaskCardProps) {
-  const theme = useTheme();
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Task',
+      'Are you sure you want to delete this task?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
+      ],
+    );
+  };
 
   return (
-    <Card
-      mode="elevated"
+    <TouchableOpacity
       style={[styles.card, task.completed && styles.cardCompleted]}
       onPress={onPress}
+      activeOpacity={0.85}
     >
-      <Card.Content style={styles.content}>
-        <View style={styles.row}>
-          <Checkbox
-            status={task.completed ? 'checked' : 'unchecked'}
-            onPress={onToggle}
-            color={theme.colors.tertiary}
-          />
+      <TouchableOpacity
+        style={[styles.checkbox, task.completed && styles.checkboxChecked]}
+        onPress={onToggle}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      >
+        {task.completed ? <Text style={styles.checkmark}>✓</Text> : null}
+      </TouchableOpacity>
 
-          <View style={styles.body}>
-            <View style={styles.titleRow}>
-              <Text
-                variant="titleSmall"
-                numberOfLines={1}
-                style={[
-                  styles.title,
-                  task.completed && styles.titleCompleted,
-                ]}
-              >
-                {task.title}
-              </Text>
-              <Chip
-                compact
-                mode="flat"
-                style={[
-                  styles.chip,
-                  task.completed ? styles.chipCompleted : styles.chipActive,
-                ]}
-                textStyle={[
-                  styles.chipText,
-                  {
-                    color: task.completed
-                      ? theme.colors.tertiary
-                      : theme.colors.secondary,
-                  },
-                ]}
-              >
-                {task.completed ? 'Completed' : 'Active'}
-              </Chip>
-            </View>
-
-            <Text
-              variant="bodySmall"
-              numberOfLines={2}
-              style={[
-                styles.description,
-                task.completed && styles.descriptionCompleted,
-              ]}
-            >
-              {truncateText(task.description, 80)}
-            </Text>
-
-            <View style={styles.dateRow}>
-              <IconButton
-                icon="calendar-outline"
-                size={14}
-                iconColor={theme.colors.onSurfaceVariant}
-                style={styles.dateIcon}
-              />
-              <Text variant="labelSmall" style={styles.date}>
-                {formatDate(task.createdAt)}
-              </Text>
-            </View>
-          </View>
-
-          <IconButton
-            icon="delete-outline"
-            iconColor={theme.colors.error}
-            size={20}
-            onPress={onDelete}
-            accessibilityLabel="Delete task"
-          />
+      <View style={styles.content}>
+        <View style={styles.titleRow}>
+          <Text
+            style={[styles.title, task.completed && styles.titleDone]}
+            numberOfLines={1}
+          >
+            {task.title}
+          </Text>
+          <StatusBadge completed={task.completed} />
         </View>
-      </Card.Content>
-    </Card>
+
+        <Text
+          style={[styles.description, task.completed && styles.textMuted]}
+          numberOfLines={2}
+        >
+          {truncateText(task.description, 90)}
+        </Text>
+
+        <Text style={styles.date}>{formatDate(task.createdAt)}</Text>
+
+        {task.owner ? (
+          <Text style={styles.owner} numberOfLines={1}>
+            Owner: {task.owner.name}
+          </Text>
+        ) : null}
+      </View>
+
+      <TouchableOpacity onPress={handleDelete} style={styles.deleteBtn}>
+        <Text style={styles.deleteText}>Delete</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 10,
-  },
-  cardCompleted: {
-    opacity: 0.75,
-  },
-  content: {
-    paddingVertical: 8,
-  },
-  row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  body: {
-    flex: 1,
-    marginTop: 8,
+  cardCompleted: { opacity: 0.78 },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: colors.border,
+    marginRight: 10,
+    marginTop: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  checkboxChecked: {
+    backgroundColor: colors.success,
+    borderColor: colors.success,
+  },
+  checkmark: { color: '#FFF', fontSize: 13, fontWeight: '700' },
+  content: { flex: 1 },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     gap: 8,
     marginBottom: 4,
   },
   title: {
     flex: 1,
+    fontSize: 16,
     fontWeight: '600',
+    color: colors.text,
   },
-  titleCompleted: {
+  titleDone: {
     textDecorationLine: 'line-through',
-    opacity: 0.5,
-  },
-  chip: {
-    height: 24,
-  },
-  chipActive: {
-    backgroundColor: '#E0F7F6',
-  },
-  chipCompleted: {
-    backgroundColor: '#DCFCE7',
-  },
-  chipText: {
-    fontSize: 11,
-    fontWeight: '600',
-    marginVertical: 0,
+    color: colors.textMuted,
   },
   description: {
-    opacity: 0.7,
+    fontSize: 14,
+    color: colors.textSecondary,
     lineHeight: 20,
     marginBottom: 4,
   },
-  descriptionCompleted: {
-    opacity: 0.45,
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateIcon: {
-    margin: 0,
-    width: 20,
-    height: 20,
-  },
-  date: {
-    opacity: 0.5,
-    marginLeft: -4,
-  },
+  textMuted: { color: colors.textMuted },
+  date: { fontSize: 12, color: colors.textMuted },
+  owner: { fontSize: 12, color: colors.accent, marginTop: 4 },
+  deleteBtn: { padding: 4, marginLeft: 6 },
+  deleteText: { fontSize: 12, color: colors.error, fontWeight: '600' },
 });

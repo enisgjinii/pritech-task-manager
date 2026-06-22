@@ -1,69 +1,69 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, HelperText, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { MotionScreen, MotionView } from '../components/motion';
-import { RootStackParamList } from '../types/Task';
+import { fetchRandomUsers } from '../api/publicApis';
+import InputField from '../components/InputField';
+import PrimaryButton from '../components/PrimaryButton';
+import { colors } from '../constants/colors';
+import { addStoredTask } from '../storage/taskStorage';
+import { RootStackParamList, TaskOwner } from '../types/task';
 import { generateId } from '../utils/date';
-import { addTask } from '../utils/storage';
+import { validateTaskForm } from '../utils/validators';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AddTask'>;
-
-interface FormErrors {
-  title?: string;
-  description?: string;
-}
-
-function validateForm(title: string, description: string): FormErrors {
-  const errors: FormErrors = {};
-  const trimmedTitle = title.trim();
-  const trimmedDescription = description.trim();
-
-  if (!trimmedTitle) {
-    errors.title = 'Title is required.';
-  } else if (trimmedTitle.length < 3) {
-    errors.title = 'Title must be at least 3 characters.';
-  }
-
-  if (!trimmedDescription) {
-    errors.description = 'Description is required.';
-  } else if (trimmedDescription.length < 5) {
-    errors.description = 'Description must be at least 5 characters.';
-  }
-
-  return errors;
-}
+type Nav = NativeStackNavigationProp<RootStackParamList, 'AddTask'>;
+type Route = RouteProp<RootStackParamList, 'AddTask'>;
 
 export default function AddTaskScreen() {
-  const theme = useTheme();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<Nav>();
+  const route = useRoute<Route>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const [people, setPeople] = useState<TaskOwner[]>([]);
+  const [selectedOwner, setSelectedOwner] = useState<TaskOwner | undefined>(
+    route.params?.owner,
+  );
+
+  const loadPeople = useCallback(async () => {
+    try {
+      setPeople(await fetchRandomUsers());
+    } catch {
+      setPeople([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPeople();
+  }, [loadPeople]);
 
   const handleSubmit = async () => {
-    const validationErrors = validateForm(title, description);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) return;
+    const validation = validateTaskForm(title, description);
+    setErrors(validation as Record<string, string>);
+    if (Object.keys(validation).length > 0) return;
 
     setSaving(true);
     try {
-      await addTask({
+      await addStoredTask({
         id: generateId(),
         title: title.trim(),
         description: description.trim(),
         completed: false,
         createdAt: new Date().toISOString(),
+        owner: selectedOwner,
+        source: 'manual',
       });
       navigation.goBack();
     } finally {
@@ -72,92 +72,94 @@ export default function AddTaskScreen() {
   };
 
   return (
-    <MotionScreen variant="slideInRight">
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: theme.colors.background }]}
-        edges={['bottom']}
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <KeyboardAvoidingView
-          style={styles.flex}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        >
-          <ScrollView
-            contentContainerStyle={styles.content}
-            keyboardShouldPersistTaps="handled"
-          >
-            <MotionView variant="fadeInUp" delay={0}>
-              <TextInput
-                label="Title"
-                placeholder="Enter task title"
-                mode="outlined"
-                value={title}
-                onChangeText={setTitle}
-                error={!!errors.title}
-                maxLength={100}
-                style={styles.input}
-              />
-              <HelperText type="error" visible={!!errors.title}>
-                {errors.title}
-              </HelperText>
-            </MotionView>
+        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+          <InputField
+            label="Title"
+            placeholder="Enter task title"
+            value={title}
+            onChangeText={setTitle}
+            error={errors.title}
+            maxLength={100}
+          />
+          <InputField
+            label="Description"
+            placeholder="Enter task description"
+            value={description}
+            onChangeText={setDescription}
+            error={errors.description}
+            multiline
+            numberOfLines={4}
+            style={styles.textArea}
+          />
 
-            <MotionView variant="fadeInUp" delay={80}>
-              <TextInput
-                label="Description"
-                placeholder="Enter task description"
-                mode="outlined"
-                value={description}
-                onChangeText={setDescription}
-                error={!!errors.description}
-                multiline
-                numberOfLines={4}
-                style={[styles.input, styles.textArea]}
-              />
-              <HelperText type="error" visible={!!errors.description}>
-                {errors.description}
-              </HelperText>
-            </MotionView>
-
-            <MotionView variant="fadeInUp" delay={160}>
-              <Button
-                mode="contained"
-                onPress={handleSubmit}
-                loading={saving}
-                disabled={saving}
-                style={styles.button}
-                contentStyle={styles.buttonContent}
+          <Text style={styles.sectionTitle}>Suggested People (optional)</Text>
+          <Text style={styles.sectionHint}>Random User API</Text>
+          {people.map((person) => {
+            const selected = selectedOwner?.email === person.email;
+            return (
+              <TouchableOpacity
+                key={person.email}
+                style={[styles.personRow, selected && styles.personSelected]}
+                onPress={() =>
+                  setSelectedOwner(selected ? undefined : person)
+                }
               >
-                Add Task
-              </Button>
-            </MotionView>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </MotionScreen>
+                <Image source={{ uri: person.avatar }} style={styles.avatar} />
+                <View style={styles.personInfo}>
+                  <Text style={styles.personName}>{person.name}</Text>
+                  <Text style={styles.personEmail}>{person.email}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+          <PrimaryButton
+            title="Add Task"
+            onPress={handleSubmit}
+            loading={saving}
+            style={styles.submit}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: { flex: 1, backgroundColor: colors.background },
+  flex: { flex: 1 },
+  content: { padding: 16 },
+  textArea: { minHeight: 110, textAlignVertical: 'top' },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 4,
   },
-  flex: {
-    flex: 1,
+  sectionHint: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginBottom: 10,
   },
-  content: {
-    padding: 16,
-  },
-  input: {
-    backgroundColor: 'transparent',
-  },
-  textArea: {
-    minHeight: 120,
-  },
-  button: {
-    marginTop: 8,
+  personRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
     borderRadius: 10,
+    padding: 10,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  buttonContent: {
-    paddingVertical: 6,
-  },
+  personSelected: { borderColor: colors.accent, backgroundColor: colors.accentLight },
+  avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
+  personInfo: { flex: 1 },
+  personName: { fontSize: 14, fontWeight: '600', color: colors.text },
+  personEmail: { fontSize: 12, color: colors.textSecondary },
+  submit: { marginTop: 12 },
 });

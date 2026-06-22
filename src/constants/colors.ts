@@ -1,11 +1,10 @@
 export const colors = {
-  background: '#F4F6F9',
+  background: '#F5F7FA',
   surface: '#FFFFFF',
   primary: '#0A1128',
-  primaryLight: '#1B2A4A',
   accent: '#00A89E',
   accentLight: '#E0F7F6',
-  text: '#0A1128',
+  text: '#0F172A',
   textSecondary: '#64748B',
   textMuted: '#94A3B8',
   border: '#E2E8F0',
@@ -14,9 +13,4 @@ export const colors = {
   success: '#16A34A',
   successLight: '#DCFCE7',
   warning: '#EA580C',
-  warningLight: '#FFEDD5',
-  completed: '#16A34A',
-  active: '#00A89E',
-  shadow: '#000000',
-  overlay: 'rgba(10, 17, 40, 0.08)',
 };
