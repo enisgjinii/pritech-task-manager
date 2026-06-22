@@ -4,12 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { colors } from '../constants/colors';
+import DrawerNavigator from './DrawerNavigator';
+import { navigationRef } from './navigationRef';
 import { isOnboardingComplete } from '../storage/onboardingStorage';
-import AddTaskScreen from '../screens/AddTaskScreen';
-import ApiHubScreen from '../screens/ApiHubScreen';
-import HomeScreen from '../screens/HomeScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
-import TaskDetailsScreen from '../screens/TaskDetailsScreen';
 import { RootStackParamList } from '../types/task';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,42 +32,16 @@ export default function AppNavigator() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
-        initialRouteName={showOnboarding ? 'Onboarding' : 'Home'}
+        initialRouteName={showOnboarding ? 'Onboarding' : 'MainDrawer'}
         screenOptions={{
-          headerStyle: { backgroundColor: colors.primary },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: { fontWeight: '600' },
-          headerShadowVisible: false,
+          headerShown: false,
           contentStyle: { backgroundColor: colors.background },
         }}
       >
-        <Stack.Screen
-          name="Onboarding"
-          component={OnboardingScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'My Tasks' }}
-        />
-        <Stack.Screen
-          name="AddTask"
-          component={AddTaskScreen}
-          options={{ title: 'Add New Task' }}
-        />
-        <Stack.Screen
-          name="TaskDetails"
-          component={TaskDetailsScreen}
-          options={{ title: 'Task Details' }}
-        />
-        <Stack.Screen
-          name="ApiHub"
-          component={ApiHubScreen}
-          options={{ title: 'Public API Hub' }}
-        />
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen name="MainDrawer" component={DrawerNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

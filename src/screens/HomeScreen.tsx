@@ -25,18 +25,15 @@ import {
 import ApiWidgetCard from '../components/ApiWidgetCard';
 import EmptyState from '../components/EmptyState';
 import TaskCard from '../components/TaskCard';
-import PrimaryButton from '../components/PrimaryButton';
 import { colors } from '../constants/colors';
-import { clearAllAppCache } from '../storage/appCache';
-import { resetOnboarding } from '../storage/onboardingStorage';
 import {
   getStoredTasks,
   toggleStoredTask,
   deleteStoredTask,
 } from '../storage/taskStorage';
-import { RootStackParamList, Task, TaskFilter } from '../types/task';
+import { TasksStackParamList, Task, TaskFilter } from '../types/task';
 
-type Nav = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+type Nav = NativeStackNavigationProp<TasksStackParamList, 'Home'>;
 
 export default function HomeScreen() {
   const navigation = useNavigation<Nav>();
@@ -154,35 +151,6 @@ export default function HomeScreen() {
     setTasks(await deleteStoredTask(taskId));
   };
 
-  const handleReplayOnboarding = async () => {
-    await resetOnboarding();
-    navigation.navigate('Onboarding');
-  };
-
-  const handleClearAllCache = () => {
-    Alert.alert(
-      'Clear All App Data',
-      'This will delete all tasks and reset onboarding. You will see the welcome screens again.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear All',
-          style: 'destructive',
-          onPress: async () => {
-            await clearAllAppCache();
-            setTasks([]);
-            setSearch('');
-            setFilter('all');
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Onboarding' }],
-            });
-          },
-        },
-      ],
-    );
-  };
-
   const filters: { key: TaskFilter; label: string }[] = [
     { key: 'all', label: 'All' },
     { key: 'active', label: 'Active' },
@@ -190,7 +158,7 @@ export default function HomeScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <FlatList
         data={filtered}
         keyExtractor={(item) => item.id}
@@ -218,13 +186,6 @@ export default function HomeScreen() {
             >
               <Text style={styles.widgetText}>{weather}</Text>
             </ApiWidgetCard>
-
-            <TouchableOpacity
-              style={styles.hubLink}
-              onPress={() => navigation.navigate('ApiHub')}
-            >
-              <Text style={styles.hubLinkText}>Open Public API Hub</Text>
-            </TouchableOpacity>
 
             <TextInput
               style={styles.search}
@@ -264,7 +225,15 @@ export default function HomeScreen() {
           </>
         }
         ListEmptyComponent={
-          <EmptyState message="No tasks yet. Add your first task to get started." />
+          <EmptyState
+            message={
+              tasks.length === 0
+                ? 'No tasks yet. Add your first task to get started.'
+                : search.trim()
+                  ? `No tasks match "${search.trim()}".`
+                  : 'No tasks match the selected filter.'
+            }
+          />
         }
         renderItem={({ item }) => (
           <TaskCard
@@ -276,34 +245,7 @@ export default function HomeScreen() {
             onDelete={() => handleDelete(item.id)}
           />
         )}
-        ListFooterComponent={
-          <View style={styles.cacheSection}>
-            <Text style={styles.cacheTitle}>App Data</Text>
-            <PrimaryButton
-              title="View Onboarding Again"
-              variant="outline"
-              onPress={handleReplayOnboarding}
-              style={styles.cacheBtn}
-            />
-            <PrimaryButton
-              title="Clear All App Data"
-              variant="danger"
-              onPress={handleClearAllCache}
-              style={styles.cacheBtn}
-            />
-            <Text style={styles.cacheHint}>
-              Clears saved tasks and resets onboarding.
-            </Text>
-          </View>
-        }
       />
-
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('AddTask')}
-      >
-        <Text style={styles.fabText}>+ Add Task</Text>
-      </TouchableOpacity>
 
       <Modal visible={rewardVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
@@ -331,7 +273,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  list: { padding: 16, paddingBottom: 100 },
+  list: { padding: 16, paddingBottom: 24 },
   heading: {
     fontSize: 28,
     fontWeight: '700',
@@ -339,16 +281,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   widgetText: { fontSize: 14, color: colors.text, lineHeight: 22 },
-  hubLink: {
-    alignSelf: 'flex-start',
-    marginBottom: 14,
-    paddingVertical: 8,
-  },
-  hubLinkText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.accent,
-  },
   search: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -381,17 +313,6 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginBottom: 8,
   },
-  fab: {
-    position: 'absolute',
-    right: 16,
-    bottom: 20,
-    backgroundColor: colors.accent,
-    paddingHorizontal: 18,
-    paddingVertical: 14,
-    borderRadius: 28,
-    elevation: 4,
-  },
-  fabText: { color: '#FFF', fontWeight: '700', fontSize: 15 },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',
@@ -426,23 +347,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   modalBtnText: { color: '#FFF', fontWeight: '600' },
-  cacheSection: {
-    marginTop: 24,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  cacheTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 12,
-  },
-  cacheBtn: { marginBottom: 10 },
-  cacheHint: {
-    fontSize: 12,
-    color: colors.textMuted,
-    textAlign: 'center',
-    lineHeight: 18,
-  },
 });

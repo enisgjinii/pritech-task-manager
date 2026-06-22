@@ -9,7 +9,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -18,23 +22,24 @@ import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
 import { colors } from '../constants/colors';
 import { addStoredTask } from '../storage/taskStorage';
-import { RootStackParamList, TaskOwner } from '../types/task';
+import { TabParamList, TaskOwner } from '../types/task';
 import { generateId } from '../utils/date';
 import { validateTaskForm } from '../utils/validators';
 
-type Nav = NativeStackNavigationProp<RootStackParamList, 'AddTask'>;
-type Route = RouteProp<RootStackParamList, 'AddTask'>;
+type AddTaskNav = CompositeNavigationProp<
+  NativeStackNavigationProp<{ AddTask: undefined }, 'AddTask'>,
+  BottomTabNavigationProp<TabParamList>
+>;
 
 export default function AddTaskScreen() {
-  const navigation = useNavigation<Nav>();
-  const route = useRoute<Route>();
+  const navigation = useNavigation<AddTaskNav>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [people, setPeople] = useState<TaskOwner[]>([]);
   const [selectedOwner, setSelectedOwner] = useState<TaskOwner | undefined>(
-    route.params?.owner,
+    undefined,
   );
 
   const loadPeople = useCallback(async () => {
@@ -65,7 +70,7 @@ export default function AddTaskScreen() {
         owner: selectedOwner,
         source: 'manual',
       });
-      navigation.goBack();
+      navigation.navigate('Tasks');
     } finally {
       setSaving(false);
     }

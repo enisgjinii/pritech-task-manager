@@ -44,7 +44,7 @@ export default function OnboardingScreen({ navigation }: Props) {
 
   const finish = async () => {
     await setOnboardingComplete();
-    navigation.replace('Home');
+    navigation.replace('MainDrawer');
   };
 
   const goBack = () => {

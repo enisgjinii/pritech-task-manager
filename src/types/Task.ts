@@ -1,3 +1,5 @@
+import { NavigatorScreenParams } from '@react-navigation/native';
+
 export type TaskOwner = {
   name: string;
   email: string;
@@ -26,8 +28,25 @@ export type TaskFilter = 'all' | 'active' | 'completed';
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  Home: undefined;
-  AddTask: { owner?: TaskOwner } | undefined;
-  TaskDetails: { taskId: string };
+  MainDrawer: undefined;
+};
+
+export type DrawerParamList = {
+  Tabs: NavigatorScreenParams<TabParamList> | undefined;
+};
+
+export type TabParamList = {
+  Tasks: undefined;
   ApiHub: undefined;
+  Add: undefined;
+  Settings: undefined;
+};
+
+export type TasksStackParamList = {
+  Home: undefined;
+  TaskDetails: { taskId: string };
+};
+
+export type AddTaskParams = {
+  owner?: TaskOwner;
 };

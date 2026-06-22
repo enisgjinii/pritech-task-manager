@@ -1,6 +1,26 @@
 # PRITECH Task Manager
 
+Repository: https://github.com/enisgjinii/pritech-task-manager
+
 A clean, professional React Native task manager built with Expo and TypeScript. Manage personal tasks locally while enriching the experience with 15 free public APIs used as productivity widgets, imports, and fun rewards.
+
+## PRITECH Technical Task Checklist
+
+| Requirement | Status | Implementation |
+|-------------|--------|----------------|
+| Task list screen | Done | `HomeScreen` — FlatList with task cards |
+| Add new task | Done | `AddTaskScreen` — title, description, validation |
+| Mark completed / not completed | Done | Checkbox on list + button on details |
+| Delete task | Done | Delete on list and details (with confirmation) |
+| Simple task details view | Done | `TaskDetailsScreen` — full task info |
+| Basic input validation | Done | `validators.ts` — required fields, min length |
+| Clean and simple UI | Done | PRITECH colors, reusable components |
+| Fetch data from public API | Done | Advice Slip, Open-Meteo, and 13 more APIs |
+| **Task fields:** title, description, status, created date | Done | `src/types/task.ts` |
+| **Bonus:** search by title | Done | Search bar on Home |
+| **Bonus:** filter by status | Done | All / Active / Completed filters |
+| **Bonus:** local storage | Done | AsyncStorage (`@pritech_tasks`) |
+| **Bonus:** navigation between screens | Done | Stack + tabs + drawer |
 
 ## Features
 
@@ -67,7 +87,14 @@ Data persists after app reload. No backend or authentication is used.
 
 ## Screenshots
 
-<!-- Add screenshots here -->
+Add screenshots or a short screen recording before submission. Suggested captures:
+
+1. Task list with search and filters
+2. Add task form with validation errors
+3. Task details screen
+4. Public API Hub (optional bonus showcase)
+
+Save images to `docs/screenshots/` and reference them here.
 
 ## Implementation Notes
 

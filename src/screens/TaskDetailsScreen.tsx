@@ -24,11 +24,11 @@ import {
   getStoredTasks,
   toggleStoredTask,
 } from '../storage/taskStorage';
-import { RootStackParamList, Task } from '../types/task';
+import { TasksStackParamList, Task } from '../types/task';
 import { formatDate } from '../utils/date';
 
-type Nav = NativeStackNavigationProp<RootStackParamList, 'TaskDetails'>;
-type Route = RouteProp<RootStackParamList, 'TaskDetails'>;
+type Nav = NativeStackNavigationProp<TasksStackParamList, 'TaskDetails'>;
+type Route = RouteProp<TasksStackParamList, 'TaskDetails'>;
 
 export default function TaskDetailsScreen() {
   const navigation = useNavigation<Nav>();

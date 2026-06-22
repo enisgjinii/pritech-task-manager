@@ -8,8 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 import {
   fetchAdvice,
@@ -30,12 +29,13 @@ import {
   weatherCodeLabel,
 } from '../api/publicApis';
 import ApiWidgetCard from '../components/ApiWidgetCard';
+import ScreenHeader from '../components/ScreenHeader';
 import { colors } from '../constants/colors';
 import { addStoredTask, mergeImportedTasks } from '../storage/taskStorage';
-import { RootStackParamList, Task } from '../types/task';
+import { TabParamList, Task } from '../types/task';
 import { decodeHtml, generateId } from '../utils/date';
 
-type Nav = NativeStackNavigationProp<RootStackParamList, 'ApiHub'>;
+type Nav = BottomTabNavigationProp<TabParamList, 'ApiHub'>;
 
 function useApiCard<T>(loader: () => Promise<T>) {
   const [data, setData] = useState<T | null>(null);
@@ -152,9 +152,9 @@ export default function ApiHubScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <View style={styles.container}>
+      <ScreenHeader title="Public API Hub" />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.heading}>Public API Hub</Text>
         <Text style={styles.subheading}>
           Explore all free APIs used in this app. Each card loads independently.
         </Text>
@@ -162,7 +162,7 @@ export default function ApiHubScreen() {
         {importMessage ? (
           <View style={styles.banner}>
             <Text style={styles.bannerText}>{importMessage}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Tasks')}>
               <Text style={styles.bannerLink}>View tasks</Text>
             </TouchableOpacity>
           </View>
@@ -422,19 +422,13 @@ export default function ApiHubScreen() {
           ) : null}
         </ApiWidgetCard>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: 16, paddingBottom: 32 },
-  heading: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 6,
-  },
   subheading: {
     fontSize: 14,
     color: colors.textSecondary,
