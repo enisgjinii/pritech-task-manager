@@ -20,6 +20,7 @@ A clean, simple React Native mobile application for managing personal tasks. Bui
 - React Native
 - TypeScript
 - Expo SDK 56
+- React Native Paper (Material Design UI)
 - React Navigation (Native Stack)
 - AsyncStorage
 - Functional components and React hooks

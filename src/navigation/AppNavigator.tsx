@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTheme } from 'react-native-paper';
 
 import AppHeader from '../components/AppHeader';
-import { colors } from '../constants/colors';
 import AddTaskScreen from '../screens/AddTaskScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen';
 import TaskListScreen from '../screens/TaskListScreen';
@@ -11,15 +11,17 @@ import { RootStackParamList } from '../types/Task';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
+  const theme = useTheme();
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: colors.primary },
-          headerTintColor: colors.surface,
+          headerStyle: { backgroundColor: theme.colors.primary },
+          headerTintColor: theme.colors.onPrimary,
           headerTitleStyle: { fontWeight: '600' },
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: colors.background },
+          contentStyle: { backgroundColor: theme.colors.background },
         }}
       >
         <Stack.Screen

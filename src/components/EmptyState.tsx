@@ -1,19 +1,26 @@
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
-
-import { colors } from '../constants/colors';
+import { StyleSheet, View } from 'react-native';
+import { Icon, Text, useTheme } from 'react-native-paper';
 
 interface EmptyStateProps {
   message: string;
 }
 
 export default function EmptyState({ message }: EmptyStateProps) {
+  const theme = useTheme();
+
   return (
     <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <Ionicons name="clipboard-outline" size={40} color={colors.textMuted} />
+      <View
+        style={[
+          styles.iconContainer,
+          { backgroundColor: theme.colors.secondaryContainer },
+        ]}
+      >
+        <Icon source="clipboard-text-outline" size={40} color={theme.colors.onSurfaceVariant} />
       </View>
-      <Text style={styles.message}>{message}</Text>
+      <Text variant="bodyLarge" style={styles.message}>
+        {message}
+      </Text>
     </View>
   );
 }
@@ -29,15 +36,13 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: colors.accentLight,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
   },
   message: {
-    fontSize: 16,
-    color: colors.textSecondary,
     textAlign: 'center',
+    opacity: 0.7,
     lineHeight: 24,
   },
 });

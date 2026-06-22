@@ -1,14 +1,17 @@
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
 
 import AppLogo from './AppLogo';
-import { colors } from '../constants/colors';
 
 export default function AppHeader() {
   return (
     <View style={styles.container}>
-      <AppLogo height={24} />
-      <Text style={styles.subtitle}>Task Manager</Text>
+      <View style={styles.logoWrap}>
+        <AppLogo height={20} />
+      </View>
+      <Text variant="titleMedium" style={styles.subtitle}>
+        Task Manager
+      </Text>
     </View>
   );
 }
@@ -17,11 +20,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
+  },
+  logoWrap: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   subtitle: {
-    fontSize: 16,
+    color: '#FFFFFF',
     fontWeight: '600',
-    color: colors.surface,
   },
 });

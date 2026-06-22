@@ -1,13 +1,12 @@
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
-  StyleSheet,
+  Card,
+  IconButton,
   Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  useTheme,
+} from 'react-native-paper';
 
-import { colors } from '../constants/colors';
 import { Quote } from '../services/quoteApi';
 
 interface QuoteCardProps {
@@ -23,99 +22,88 @@ export default function QuoteCard({
   error,
   onRefresh,
 }: QuoteCardProps) {
-  return (
-    <View style={styles.card}>
-      <View style={styles.header}>
-        <View style={styles.labelRow}>
-          <Ionicons name="chatbubble-ellipses-outline" size={14} color={colors.accent} />
-          <Text style={styles.label}>Daily Motivation</Text>
-        </View>
-        <TouchableOpacity
-          onPress={onRefresh}
-          disabled={loading}
-          style={styles.refreshButton}
-          accessibilityLabel="Refresh quote"
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color={colors.accent} />
-          ) : (
-            <Ionicons name="refresh-outline" size={18} color={colors.accent} />
-          )}
-        </TouchableOpacity>
-      </View>
+  const theme = useTheme();
 
-      {loading ? (
-        <ActivityIndicator color={colors.accent} style={styles.loader} />
-      ) : error ? (
-        <Text style={styles.errorText}>{error}</Text>
-      ) : quote ? (
-        <>
-          <Text style={styles.quote}>"{quote.content}"</Text>
-          <Text style={styles.author}>— {quote.author}</Text>
-        </>
-      ) : null}
-    </View>
+  return (
+    <Card mode="elevated" style={[styles.card, { borderLeftColor: theme.colors.secondary }]}>
+      <Card.Title
+        title="Daily Motivation"
+        titleStyle={[styles.title, { color: theme.colors.secondary }]}
+        left={(props) => (
+          <IconButton
+            {...props}
+            icon="format-quote-close"
+            iconColor={theme.colors.secondary}
+            size={20}
+            style={styles.titleIcon}
+          />
+        )}
+        right={() => (
+          <IconButton
+            icon="refresh"
+            iconColor={theme.colors.secondary}
+            size={20}
+            onPress={onRefresh}
+            disabled={loading}
+            accessibilityLabel="Refresh quote"
+          />
+        )}
+      />
+      <Card.Content style={styles.content}>
+        {loading ? (
+          <ActivityIndicator animating color={theme.colors.secondary} style={styles.loader} />
+        ) : error ? (
+          <Text variant="bodyMedium" style={styles.errorText}>
+            {error}
+          </Text>
+        ) : quote ? (
+          <>
+            <Text variant="bodyMedium" style={styles.quote}>
+              "{quote.content}"
+            </Text>
+            <Text variant="bodySmall" style={styles.author}>
+              — {quote.author}
+            </Text>
+          </>
+        ) : null}
+      </Card.Content>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
     marginBottom: 16,
     borderLeftWidth: 4,
-    borderLeftColor: colors.accent,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  labelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  label: {
+  title: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.accent,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
-  refreshButton: {
+  titleIcon: {
+    margin: 0,
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.accentLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  content: {
+    paddingTop: 0,
   },
   loader: {
-    marginVertical: 12,
+    marginVertical: 8,
   },
   quote: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: colors.text,
     fontStyle: 'italic',
+    lineHeight: 22,
   },
   author: {
     marginTop: 8,
-    fontSize: 13,
-    color: colors.textSecondary,
+    opacity: 0.7,
     fontWeight: '500',
   },
   errorText: {
-    fontSize: 14,
-    color: colors.textSecondary,
+    opacity: 0.7,
     lineHeight: 20,
   },
 });

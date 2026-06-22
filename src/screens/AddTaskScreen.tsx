@@ -7,11 +7,9 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Button, HelperText, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import AppButton from '../components/AppButton';
-import AppInput from '../components/AppInput';
-import { colors } from '../constants/colors';
 import { RootStackParamList } from '../types/Task';
 import { generateId } from '../utils/date';
 import { addTask } from '../utils/storage';
@@ -44,6 +42,7 @@ function validateForm(title: string, description: string): FormErrors {
 }
 
 export default function AddTaskScreen() {
+  const theme = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -72,7 +71,10 @@ export default function AddTaskScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      edges={['bottom']}
+    >
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -81,32 +83,45 @@ export default function AddTaskScreen() {
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
         >
-          <AppInput
+          <TextInput
             label="Title"
             placeholder="Enter task title"
+            mode="outlined"
             value={title}
             onChangeText={setTitle}
-            error={errors.title}
+            error={!!errors.title}
             maxLength={100}
+            style={styles.input}
           />
+          <HelperText type="error" visible={!!errors.title}>
+            {errors.title}
+          </HelperText>
 
-          <AppInput
+          <TextInput
             label="Description"
             placeholder="Enter task description"
+            mode="outlined"
             value={description}
             onChangeText={setDescription}
-            error={errors.description}
+            error={!!errors.description}
             multiline
             numberOfLines={4}
-            textAlignVertical="top"
-            style={styles.textArea}
+            style={[styles.input, styles.textArea]}
           />
+          <HelperText type="error" visible={!!errors.description}>
+            {errors.description}
+          </HelperText>
 
-          <AppButton
-            title="Add Task"
+          <Button
+            mode="contained"
             onPress={handleSubmit}
             loading={saving}
-          />
+            disabled={saving}
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+          >
+            Add Task
+          </Button>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -116,7 +131,6 @@ export default function AddTaskScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   flex: {
     flex: 1,
@@ -124,8 +138,17 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
   },
+  input: {
+    backgroundColor: 'transparent',
+  },
   textArea: {
     minHeight: 120,
-    paddingTop: 12,
+  },
+  button: {
+    marginTop: 8,
+    borderRadius: 10,
+  },
+  buttonContent: {
+    paddingVertical: 6,
   },
 });

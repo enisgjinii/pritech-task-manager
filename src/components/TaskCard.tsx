@@ -1,12 +1,13 @@
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View } from 'react-native';
 import {
-  StyleSheet,
+  Card,
+  Checkbox,
+  Chip,
+  IconButton,
   Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  useTheme,
+} from 'react-native-paper';
 
-import { colors } from '../constants/colors';
 import { Task } from '../types/Task';
 import { formatDate, truncateText } from '../utils/date';
 
@@ -23,115 +24,104 @@ export default function TaskCard({
   onToggle,
   onDelete,
 }: TaskCardProps) {
-  return (
-    <View style={[styles.card, task.completed && styles.cardCompleted]}>
-      <TouchableOpacity
-        style={[styles.checkbox, task.completed && styles.checkboxChecked]}
-        onPress={onToggle}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        accessibilityLabel={
-          task.completed ? 'Mark as not completed' : 'Mark as completed'
-        }
-      >
-        {task.completed ? (
-          <Ionicons name="checkmark" size={14} color={colors.surface} />
-        ) : null}
-      </TouchableOpacity>
+  const theme = useTheme();
 
-      <TouchableOpacity
-        style={styles.content}
-        onPress={onPress}
-        activeOpacity={0.7}
-      >
-        <View style={styles.titleRow}>
-          <Text
-            style={[styles.title, task.completed && styles.titleCompleted]}
-            numberOfLines={1}
-          >
-            {task.title}
-          </Text>
-          <View
-            style={[
-              styles.badge,
-              task.completed ? styles.badgeCompleted : styles.badgeActive,
-            ]}
-          >
+  return (
+    <Card
+      mode="elevated"
+      style={[styles.card, task.completed && styles.cardCompleted]}
+      onPress={onPress}
+    >
+      <Card.Content style={styles.content}>
+        <View style={styles.row}>
+          <Checkbox
+            status={task.completed ? 'checked' : 'unchecked'}
+            onPress={onToggle}
+            color={theme.colors.tertiary}
+          />
+
+          <View style={styles.body}>
+            <View style={styles.titleRow}>
+              <Text
+                variant="titleSmall"
+                numberOfLines={1}
+                style={[
+                  styles.title,
+                  task.completed && styles.titleCompleted,
+                ]}
+              >
+                {task.title}
+              </Text>
+              <Chip
+                compact
+                mode="flat"
+                style={[
+                  styles.chip,
+                  task.completed ? styles.chipCompleted : styles.chipActive,
+                ]}
+                textStyle={[
+                  styles.chipText,
+                  { color: task.completed ? theme.colors.tertiary : theme.colors.secondary },
+                ]}
+              >
+                {task.completed ? 'Completed' : 'Active'}
+              </Chip>
+            </View>
+
             <Text
+              variant="bodySmall"
+              numberOfLines={2}
               style={[
-                styles.badgeText,
-                task.completed ? styles.badgeTextCompleted : styles.badgeTextActive,
+                styles.description,
+                task.completed && styles.descriptionCompleted,
               ]}
             >
-              {task.completed ? 'Completed' : 'Active'}
+              {truncateText(task.description, 80)}
             </Text>
+
+            <View style={styles.dateRow}>
+              <IconButton
+                icon="calendar-outline"
+                size={14}
+                iconColor={theme.colors.onSurfaceVariant}
+                style={styles.dateIcon}
+              />
+              <Text variant="labelSmall" style={styles.date}>
+                {formatDate(task.createdAt)}
+              </Text>
+            </View>
           </View>
+
+          <IconButton
+            icon="delete-outline"
+            iconColor={theme.colors.error}
+            size={20}
+            onPress={onDelete}
+            accessibilityLabel="Delete task"
+          />
         </View>
-
-        <Text
-          style={[
-            styles.description,
-            task.completed && styles.descriptionCompleted,
-          ]}
-          numberOfLines={2}
-        >
-          {truncateText(task.description, 80)}
-        </Text>
-
-        <View style={styles.dateRow}>
-          <Ionicons name="calendar-outline" size={12} color={colors.textMuted} />
-          <Text style={styles.date}>{formatDate(task.createdAt)}</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={onDelete}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        accessibilityLabel="Delete task"
-      >
-        <Ionicons name="trash-outline" size={20} color={colors.error} />
-      </TouchableOpacity>
-    </View>
+      </Card.Content>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 14,
     marginBottom: 10,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
   cardCompleted: {
     opacity: 0.75,
-    backgroundColor: '#FAFAFA',
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: colors.border,
-    marginRight: 12,
-    marginTop: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: colors.success,
-    borderColor: colors.success,
   },
   content: {
+    paddingVertical: 8,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  body: {
     flex: 1,
+    marginTop: 8,
   },
   titleRow: {
     flexDirection: 'row',
@@ -142,55 +132,45 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: 16,
     fontWeight: '600',
-    color: colors.text,
   },
   titleCompleted: {
     textDecorationLine: 'line-through',
-    color: colors.textMuted,
+    opacity: 0.5,
   },
-  badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
+  chip: {
+    height: 24,
   },
-  badgeActive: {
-    backgroundColor: colors.accentLight,
+  chipActive: {
+    backgroundColor: '#E0F7F6',
   },
-  badgeCompleted: {
-    backgroundColor: colors.successLight,
+  chipCompleted: {
+    backgroundColor: '#DCFCE7',
   },
-  badgeText: {
+  chipText: {
     fontSize: 11,
     fontWeight: '600',
-  },
-  badgeTextActive: {
-    color: colors.active,
-  },
-  badgeTextCompleted: {
-    color: colors.completed,
+    marginVertical: 0,
   },
   description: {
-    fontSize: 14,
-    color: colors.textSecondary,
+    opacity: 0.7,
     lineHeight: 20,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   descriptionCompleted: {
-    color: colors.textMuted,
+    opacity: 0.45,
   },
   dateRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+  },
+  dateIcon: {
+    margin: 0,
+    width: 20,
+    height: 20,
   },
   date: {
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-  deleteButton: {
-    padding: 4,
-    marginLeft: 8,
+    opacity: 0.5,
+    marginLeft: -4,
   },
 });
