@@ -17,6 +17,7 @@
     "expo-status-bar": "~56.0.4",
     "moti": "^0.30.0",
     "react": "19.2.3",
+    "react-dom": "19.2.3",
     "react-native": "0.85.3",
     "react-native-gesture-handler": "~2.31.1",
     "react-native-reanimated": "4.3.1",
@@ -48,5 +49,9 @@
     "build:ios:ipa": "npx eas-cli@latest build --platform ios --profile preview --non-interactive",
     "build:ios:download": "npx eas-cli@latest build:download --platform ios --latest --output ./dist/pritech-task-manager.ipa"
   },
-  "private": true
+  "private": true,
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
 }
