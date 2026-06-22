@@ -9,7 +9,7 @@ import {
   navigateToAddTask,
 } from '../navigation/navigationRef';
 
-const TAB_BAR_HEIGHT = 49;
+const TAB_BAR_HEIGHT = Platform.OS === 'android' ? 56 : 49;
 
 export default function AddTaskFab() {
   const insets = useSafeAreaInsets();
