@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -25,14 +26,21 @@ export default function QuoteCard({
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.label}>Daily Motivation</Text>
+        <View style={styles.labelRow}>
+          <Ionicons name="chatbubble-ellipses-outline" size={14} color={colors.accent} />
+          <Text style={styles.label}>Daily Motivation</Text>
+        </View>
         <TouchableOpacity
           onPress={onRefresh}
           disabled={loading}
           style={styles.refreshButton}
           accessibilityLabel="Refresh quote"
         >
-          <Text style={styles.refreshText}>{loading ? '…' : '↻'}</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color={colors.accent} />
+          ) : (
+            <Ionicons name="refresh-outline" size={18} color={colors.accent} />
+          )}
         </TouchableOpacity>
       </View>
 
@@ -70,6 +78,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   label: {
     fontSize: 12,
     fontWeight: '700',
@@ -84,11 +97,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accentLight,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  refreshText: {
-    fontSize: 18,
-    color: colors.accent,
-    fontWeight: '600',
   },
   loader: {
     marginVertical: 12,

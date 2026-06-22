@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import {
   StyleSheet,
   Text,
@@ -32,7 +33,9 @@ export default function TaskCard({
           task.completed ? 'Mark as not completed' : 'Mark as completed'
         }
       >
-        {task.completed ? <Text style={styles.checkmark}>✓</Text> : null}
+        {task.completed ? (
+          <Ionicons name="checkmark" size={14} color={colors.surface} />
+        ) : null}
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -74,7 +77,10 @@ export default function TaskCard({
           {truncateText(task.description, 80)}
         </Text>
 
-        <Text style={styles.date}>{formatDate(task.createdAt)}</Text>
+        <View style={styles.dateRow}>
+          <Ionicons name="calendar-outline" size={12} color={colors.textMuted} />
+          <Text style={styles.date}>{formatDate(task.createdAt)}</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -83,7 +89,7 @@ export default function TaskCard({
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         accessibilityLabel="Delete task"
       >
-        <Text style={styles.deleteIcon}>🗑</Text>
+        <Ionicons name="trash-outline" size={20} color={colors.error} />
       </TouchableOpacity>
     </View>
   );
@@ -123,11 +129,6 @@ const styles = StyleSheet.create({
   checkboxChecked: {
     backgroundColor: colors.success,
     borderColor: colors.success,
-  },
-  checkmark: {
-    color: colors.surface,
-    fontSize: 14,
-    fontWeight: '700',
   },
   content: {
     flex: 1,
@@ -179,6 +180,11 @@ const styles = StyleSheet.create({
   descriptionCompleted: {
     color: colors.textMuted,
   },
+  dateRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   date: {
     fontSize: 12,
     color: colors.textMuted,
@@ -186,8 +192,5 @@ const styles = StyleSheet.create({
   deleteButton: {
     padding: 4,
     marginLeft: 8,
-  },
-  deleteIcon: {
-    fontSize: 18,
   },
 });

@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
@@ -126,15 +127,32 @@ export default function TaskListScreen() {
               onRefresh={loadQuote}
             />
 
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search tasks by title..."
-              placeholderTextColor={colors.textMuted}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+            <View style={styles.searchContainer}>
+              <Ionicons
+                name="search-outline"
+                size={18}
+                color={colors.textMuted}
+                style={styles.searchIcon}
+              />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search tasks by title..."
+                placeholderTextColor={colors.textMuted}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => setSearchQuery('')}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  accessibilityLabel="Clear search"
+                >
+                  <Ionicons name="close-circle" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
+              )}
+            </View>
 
             <FilterTabs
               activeFilter={activeFilter}
@@ -167,7 +185,7 @@ export default function TaskListScreen() {
         activeOpacity={0.85}
         accessibilityLabel="Add new task"
       >
-        <Text style={styles.fabText}>+</Text>
+        <Ionicons name="add" size={28} color={colors.surface} />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -183,16 +201,24 @@ const styles = StyleSheet.create({
     paddingBottom: 88,
     flexGrow: 1,
   },
-  searchInput: {
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 10,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
+    marginBottom: 16,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
     paddingVertical: 12,
     fontSize: 16,
     color: colors.text,
-    marginBottom: 16,
   },
   resultCount: {
     fontSize: 13,
@@ -206,7 +232,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: colors.shadow,
@@ -214,11 +240,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 6,
-  },
-  fabText: {
-    fontSize: 28,
-    color: colors.surface,
-    fontWeight: '300',
-    marginTop: -2,
   },
 });

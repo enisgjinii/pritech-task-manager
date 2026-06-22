@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import AppHeader from '../components/AppHeader';
 import { colors } from '../constants/colors';
 import AddTaskScreen from '../screens/AddTaskScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen';
@@ -24,7 +25,7 @@ export default function AppNavigator() {
         <Stack.Screen
           name="TaskList"
           component={TaskListScreen}
-          options={{ title: 'PRITECH Task Manager' }}
+          options={{ headerTitle: () => <AppHeader /> }}
         />
         <Stack.Screen
           name="AddTask"

@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '../constants/colors';
@@ -9,7 +10,9 @@ interface EmptyStateProps {
 export default function EmptyState({ message }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>📋</Text>
+      <View style={styles.iconContainer}>
+        <Ionicons name="clipboard-outline" size={40} color={colors.textMuted} />
+      </View>
       <Text style={styles.message}>{message}</Text>
     </View>
   );
@@ -22,8 +25,13 @@ const styles = StyleSheet.create({
     paddingVertical: 48,
     paddingHorizontal: 24,
   },
-  icon: {
-    fontSize: 48,
+  iconContainer: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: colors.accentLight,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 16,
   },
   message: {
