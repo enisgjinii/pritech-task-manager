@@ -27,14 +27,10 @@ export default function TaskCard({
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const handleDelete = () => {
-    Alert.alert(
-      'Delete Task',
-      'Are you sure you want to delete this task?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: onDelete },
-      ],
-    );
+    Alert.alert('Delete Task', 'Are you sure you want to delete this task?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: onDelete },
+    ]);
   };
 
   return (
@@ -49,9 +45,7 @@ export default function TaskCard({
           onPress={onToggle}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          {task.completed ? (
-            <Text style={styles.checkmark}>✓</Text>
-          ) : null}
+          {task.completed ? <Text style={styles.checkmark}>✓</Text> : null}
         </TouchableOpacity>
 
         <View style={styles.content}>

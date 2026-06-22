@@ -9,11 +9,7 @@ import {
 } from 'react';
 import { useColorScheme } from 'react-native';
 
-import {
-  darkColors,
-  lightColors,
-  ThemeColors,
-} from '../constants/colors';
+import { darkColors, lightColors, ThemeColors } from '../constants/colors';
 import {
   getStoredThemeMode,
   setStoredThemeMode,
@@ -54,9 +50,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     [themeMode, setThemeMode, isDark, colors],
   );
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme(): ThemeContextValue {

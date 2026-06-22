@@ -1,20 +1,15 @@
 import { useCallback, useMemo, useState } from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import {
-  fetchAdvice,
-  fetchCatFact,
-  fetchProgrammingJoke,
-} from '../api/publicApis';
+import { fetchAdvice, fetchCatFact, fetchProgrammingJoke } from '../api/publicApis';
 import ApiWidgetCard from '../components/ApiWidgetCard';
 import { StaggerInView } from '../components/motion';
 import PrimaryButton from '../components/PrimaryButton';
@@ -141,31 +136,31 @@ export default function TaskDetailsScreen() {
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <StaggerInView index={0}>
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <StatusBadge completed={task.completed} />
-            <Text style={styles.date}>{formatDate(task.createdAt)}</Text>
-          </View>
-          <Text style={[styles.title, task.completed && styles.titleDone]}>
-            {task.title}
-          </Text>
-          <Text style={styles.label}>Description</Text>
-          <Text style={styles.description}>{task.description}</Text>
-          {task.owner ? (
-            <Text style={styles.owner}>
-              Owner: {task.owner.name} ({task.owner.email})
+          <View style={styles.card}>
+            <View style={styles.row}>
+              <StatusBadge completed={task.completed} />
+              <Text style={styles.date}>{formatDate(task.createdAt)}</Text>
+            </View>
+            <Text style={[styles.title, task.completed && styles.titleDone]}>
+              {task.title}
             </Text>
-          ) : null}
-        </View>
+            <Text style={styles.label}>Description</Text>
+            <Text style={styles.description}>{task.description}</Text>
+            {task.owner ? (
+              <Text style={styles.owner}>
+                Owner: {task.owner.name} ({task.owner.email})
+              </Text>
+            ) : null}
+          </View>
         </StaggerInView>
 
         <StaggerInView index={1}>
-        <PrimaryButton
-          title={task.completed ? 'Mark as Not Completed' : 'Mark as Completed'}
-          variant={task.completed ? 'outline' : 'secondary'}
-          onPress={handleToggle}
-        />
-        <PrimaryButton title="Delete Task" variant="danger" onPress={handleDelete} />
+          <PrimaryButton
+            title={task.completed ? 'Mark as Not Completed' : 'Mark as Completed'}
+            variant={task.completed ? 'outline' : 'secondary'}
+            onPress={handleToggle}
+          />
+          <PrimaryButton title="Delete Task" variant="danger" onPress={handleDelete} />
         </StaggerInView>
 
         <ApiWidgetCard
@@ -207,44 +202,44 @@ export default function TaskDetailsScreen() {
 
 function createStyles(colors: ThemeColors) {
   return StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  loading: { textAlign: 'center', marginTop: 40, color: colors.textSecondary },
-  content: { padding: 16, gap: 12 },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: 4,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  date: { fontSize: 13, color: colors.textMuted },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 16,
-    lineHeight: 32,
-  },
-  titleDone: {
-    textDecorationLine: 'line-through',
-    color: colors.textMuted,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.textSecondary,
-    textTransform: 'uppercase',
-    marginBottom: 6,
-  },
-  description: { fontSize: 16, color: colors.text, lineHeight: 24 },
-  owner: { marginTop: 12, fontSize: 13, color: colors.accent },
-  helperText: { fontSize: 14, color: colors.text, lineHeight: 22 },
+    container: { flex: 1, backgroundColor: colors.background },
+    loading: { textAlign: 'center', marginTop: 40, color: colors.textSecondary },
+    content: { padding: 16, gap: 12 },
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: 16,
+      borderWidth: 1,
+      borderColor: colors.border,
+      marginBottom: 4,
+    },
+    row: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+    date: { fontSize: 13, color: colors.textMuted },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 16,
+      lineHeight: 32,
+    },
+    titleDone: {
+      textDecorationLine: 'line-through',
+      color: colors.textMuted,
+    },
+    label: {
+      fontSize: 12,
+      fontWeight: '700',
+      color: colors.textSecondary,
+      textTransform: 'uppercase',
+      marginBottom: 6,
+    },
+    description: { fontSize: 16, color: colors.text, lineHeight: 24 },
+    owner: { marginTop: 12, fontSize: 13, color: colors.accent },
+    helperText: { fontSize: 14, color: colors.text, lineHeight: 22 },
   });
 }

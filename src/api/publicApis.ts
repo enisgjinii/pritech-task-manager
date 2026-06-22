@@ -48,11 +48,11 @@ export async function fetchJsonPlaceholderTodos(): Promise<JsonPlaceholderTodo[]
 
 export async function fetchRandomUsers(): Promise<RandomUser[]> {
   const data = await fetchJson<{
-    results: Array<{
+    results: {
       name: { first: string; last: string };
       email: string;
       picture: { thumbnail: string };
-    }>;
+    }[];
   }>('https://randomuser.me/api/?results=5');
 
   return data.results.map((user) => ({
@@ -98,11 +98,11 @@ export async function fetchPokemonReward(): Promise<PokemonReward> {
 
 export async function fetchOpenLibraryBooks(): Promise<OpenLibraryBook[]> {
   const data = await fetchJson<{
-    docs: Array<{
+    docs: {
       title?: string;
       author_name?: string[];
       first_publish_year?: number;
-    }>;
+    }[];
   }>(
     `https://openlibrary.org/search.json?q=${encodeURIComponent(OPEN_LIBRARY_QUERY)}&limit=3`,
   );
@@ -158,11 +158,11 @@ export async function fetchProgrammingJoke(): Promise<ProgrammingJoke> {
 export async function fetchTrivia(): Promise<TriviaQuestion> {
   const data = await fetchJson<{
     response_code: number;
-    results: Array<{
+    results: {
       question: string;
       correct_answer: string;
       incorrect_answers: string[];
-    }>;
+    }[];
   }>('https://opentdb.com/api.php?amount=5&type=multiple');
 
   const item = data.results?.[0];
@@ -177,12 +177,12 @@ export async function fetchTrivia(): Promise<TriviaQuestion> {
 
 export async function fetchRandomMeal(): Promise<MealIdea> {
   const data = await fetchJson<{
-    meals: Array<{
+    meals: {
       strMeal: string;
       strCategory: string;
       strArea: string;
       strMealThumb: string;
-    }>;
+    }[];
   }>('https://www.themealdb.com/api/json/v1/1/random.php');
 
   const meal = data.meals?.[0];

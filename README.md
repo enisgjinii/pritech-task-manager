@@ -6,21 +6,21 @@ A clean, professional React Native task manager built with Expo and TypeScript. 
 
 ## PRITECH Technical Task Checklist
 
-| Requirement | Status | Implementation |
-|-------------|--------|----------------|
-| Task list screen | Done | `HomeScreen` — FlatList with task cards |
-| Add new task | Done | `AddTaskScreen` — title, description, validation |
-| Mark completed / not completed | Done | Checkbox on list + button on details |
-| Delete task | Done | Delete on list and details (with confirmation) |
-| Simple task details view | Done | `TaskDetailsScreen` — full task info |
-| Basic input validation | Done | `validators.ts` — required fields, min length |
-| Clean and simple UI | Done | PRITECH colors, reusable components |
-| Fetch data from public API | Done | Advice Slip, Open-Meteo, and 13 more APIs |
-| **Task fields:** title, description, status, created date | Done | `src/types/task.ts` |
-| **Bonus:** search by title | Done | Search bar on Home |
-| **Bonus:** filter by status | Done | All / Active / Completed filters |
-| **Bonus:** local storage | Done | AsyncStorage (`@pritech_tasks`) |
-| **Bonus:** navigation between screens | Done | Stack + tabs + drawer |
+| Requirement                                               | Status | Implementation                                   |
+| --------------------------------------------------------- | ------ | ------------------------------------------------ |
+| Task list screen                                          | Done   | `HomeScreen` — FlatList with task cards          |
+| Add new task                                              | Done   | `AddTaskScreen` — title, description, validation |
+| Mark completed / not completed                            | Done   | Checkbox on list + button on details             |
+| Delete task                                               | Done   | Delete on list and details (with confirmation)   |
+| Simple task details view                                  | Done   | `TaskDetailsScreen` — full task info             |
+| Basic input validation                                    | Done   | `validators.ts` — required fields, min length    |
+| Clean and simple UI                                       | Done   | PRITECH colors, reusable components              |
+| Fetch data from public API                                | Done   | Advice Slip, Open-Meteo, and 13 more APIs        |
+| **Task fields:** title, description, status, created date | Done   | `src/types/task.ts`                              |
+| **Bonus:** search by title                                | Done   | Search bar on Home                               |
+| **Bonus:** filter by status                               | Done   | All / Active / Completed filters                 |
+| **Bonus:** local storage                                  | Done   | AsyncStorage (`@pritech_tasks`)                  |
+| **Bonus:** navigation between screens                     | Done   | Stack + tabs + drawer                            |
 
 ## Features
 
@@ -47,23 +47,23 @@ A clean, professional React Native task manager built with Expo and TypeScript. 
 
 ## Public APIs Used
 
-| # | API | Purpose |
-|---|-----|---------|
-| 1 | DummyJSON Todos | Import starter tasks |
-| 2 | JSONPlaceholder Todos | Alternative task import |
-| 3 | Random User API | Suggested task owners |
-| 4 | Open-Meteo | Working weather widget |
-| 5 | Nager.Date | Public holiday reminders |
-| 6 | PokéAPI | Completion reward |
-| 7 | Open Library | Learning / reading suggestions |
-| 8 | Dog CEO | Motivational dog image |
-| 9 | Cat Facts | Fun fact widget |
-| 10 | Advice Slip | Daily productivity advice |
-| 11 | JokeAPI | Programming jokes |
-| 12 | Open Trivia DB | Quick brain break |
-| 13 | TheMealDB | Meal break ideas |
-| 14 | CoinGecko | Market watch widget |
-| 15 | Open Notify ISS | Space status widget |
+| #   | API                   | Purpose                        |
+| --- | --------------------- | ------------------------------ |
+| 1   | DummyJSON Todos       | Import starter tasks           |
+| 2   | JSONPlaceholder Todos | Alternative task import        |
+| 3   | Random User API       | Suggested task owners          |
+| 4   | Open-Meteo            | Working weather widget         |
+| 5   | Nager.Date            | Public holiday reminders       |
+| 6   | PokéAPI               | Completion reward              |
+| 7   | Open Library          | Learning / reading suggestions |
+| 8   | Dog CEO               | Motivational dog image         |
+| 9   | Cat Facts             | Fun fact widget                |
+| 10  | Advice Slip           | Daily productivity advice      |
+| 11  | JokeAPI               | Programming jokes              |
+| 12  | Open Trivia DB        | Quick brain break              |
+| 13  | TheMealDB             | Meal break ideas               |
+| 14  | CoinGecko             | Market watch widget            |
+| 15  | Open Notify ISS       | Space status widget            |
 
 All APIs are free and require no API keys.
 

@@ -196,37 +196,37 @@ export default function HomeScreen() {
             </ApiWidgetCard>
 
             <FadeInView delay={120}>
-            <TextInput
-              style={styles.search}
-              placeholder="Search tasks by title..."
-              placeholderTextColor={colors.textMuted}
-              value={search}
-              onChangeText={setSearch}
-            />
+              <TextInput
+                style={styles.search}
+                placeholder="Search tasks by title..."
+                placeholderTextColor={colors.textMuted}
+                value={search}
+                onChangeText={setSearch}
+              />
             </FadeInView>
 
             <FadeInView delay={160}>
-            <View style={styles.filterRow}>
-              {filters.map((item) => (
-                <TouchableOpacity
-                  key={item.key}
-                  style={[
-                    styles.filterBtn,
-                    filter === item.key && styles.filterBtnActive,
-                  ]}
-                  onPress={() => setFilter(item.key)}
-                >
-                  <Text
+              <View style={styles.filterRow}>
+                {filters.map((item) => (
+                  <TouchableOpacity
+                    key={item.key}
                     style={[
-                      styles.filterText,
-                      filter === item.key && styles.filterTextActive,
+                      styles.filterBtn,
+                      filter === item.key && styles.filterBtnActive,
                     ]}
+                    onPress={() => setFilter(item.key)}
                   >
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                    <Text
+                      style={[
+                        styles.filterText,
+                        filter === item.key && styles.filterTextActive,
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </FadeInView>
 
             {filtered.length > 0 ? (
@@ -251,9 +251,7 @@ export default function HomeScreen() {
           <TaskCard
             task={item}
             animationIndex={index}
-            onPress={() =>
-              navigation.navigate('TaskDetails', { taskId: item.id })
-            }
+            onPress={() => navigation.navigate('TaskDetails', { taskId: item.id })}
             onToggle={() => handleToggle(item)}
             onDelete={() => handleDelete(item.id)}
           />
@@ -286,81 +284,81 @@ export default function HomeScreen() {
 
 function createStyles(colors: ThemeColors) {
   return StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  list: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24 },
-  heading: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 16,
-    marginTop: 0,
-  },
-  widgetText: { fontSize: 14, color: colors.text, lineHeight: 22 },
-  search: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: colors.text,
-    marginBottom: 12,
-  },
-  filterRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
-  filterBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-  },
-  filterBtnActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  filterText: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
-  filterTextActive: { color: colors.headerText },
-  count: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginBottom: 8,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.overlay,
-    justifyContent: 'center',
-    padding: 24,
-  },
-  modalCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 12,
-  },
-  pokemon: { width: 96, height: 96, marginBottom: 8 },
-  dogImage: { width: '100%', height: 160, borderRadius: 10, marginBottom: 12 },
-  modalBody: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    lineHeight: 22,
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  modalBtn: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 10,
-  },
-  modalBtnText: { color: colors.headerText, fontWeight: '600' },
+    container: { flex: 1, backgroundColor: colors.background },
+    list: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24 },
+    heading: {
+      fontSize: 28,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 16,
+      marginTop: 0,
+    },
+    widgetText: { fontSize: 14, color: colors.text, lineHeight: 22 },
+    search: {
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 10,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      fontSize: 16,
+      color: colors.text,
+      marginBottom: 12,
+    },
+    filterRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+    filterBtn: {
+      flex: 1,
+      paddingVertical: 10,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+    },
+    filterBtnActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    filterText: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
+    filterTextActive: { color: colors.headerText },
+    count: {
+      fontSize: 13,
+      color: colors.textSecondary,
+      marginBottom: 8,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.overlay,
+      justifyContent: 'center',
+      padding: 24,
+    },
+    modalCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      padding: 20,
+      alignItems: 'center',
+    },
+    modalTitle: {
+      fontSize: 20,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 12,
+    },
+    pokemon: { width: 96, height: 96, marginBottom: 8 },
+    dogImage: { width: '100%', height: 160, borderRadius: 10, marginBottom: 12 },
+    modalBody: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      lineHeight: 22,
+      textAlign: 'center',
+      marginBottom: 16,
+    },
+    modalBtn: {
+      backgroundColor: colors.primary,
+      paddingHorizontal: 24,
+      paddingVertical: 12,
+      borderRadius: 10,
+    },
+    modalBtnText: { color: colors.headerText, fontWeight: '600' },
   });
 }

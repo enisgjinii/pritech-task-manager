@@ -4,10 +4,7 @@ import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../context/ThemeContext';
-import {
-  isAddTaskScreenOpen,
-  navigateToAddTask,
-} from '../navigation/navigationRef';
+import { isAddTaskScreenOpen, navigateToAddTask } from '../navigation/navigationRef';
 
 const TAB_BAR_HEIGHT = Platform.OS === 'android' ? 56 : 49;
 

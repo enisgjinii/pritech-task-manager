@@ -3,10 +3,7 @@ export interface TaskFormErrors {
   description?: string;
 }
 
-export function validateTaskForm(
-  title: string,
-  description: string,
-): TaskFormErrors {
+export function validateTaskForm(title: string, description: string): TaskFormErrors {
   const errors: TaskFormErrors = {};
   const trimmedTitle = title.trim();
   const trimmedDescription = description.trim();

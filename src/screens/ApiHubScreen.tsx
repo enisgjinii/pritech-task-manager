@@ -160,19 +160,19 @@ export default function ApiHubScreen() {
       <ScreenHeader title="Public API Hub" />
       <ScrollView contentContainerStyle={styles.content}>
         <FadeInView>
-        <Text style={styles.subheading}>
-          Explore all free APIs used in this app. Each card loads independently.
-        </Text>
+          <Text style={styles.subheading}>
+            Explore all free APIs used in this app. Each card loads independently.
+          </Text>
         </FadeInView>
 
         {importMessage ? (
           <FadeInView delay={80}>
-          <View style={styles.banner}>
-            <Text style={styles.bannerText}>{importMessage}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Tasks')}>
-              <Text style={styles.bannerLink}>View tasks</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.banner}>
+              <Text style={styles.bannerText}>{importMessage}</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Tasks')}>
+                <Text style={styles.bannerLink}>View tasks</Text>
+              </TouchableOpacity>
+            </View>
           </FadeInView>
         ) : null}
 
@@ -259,9 +259,7 @@ export default function ApiHubScreen() {
                 {holiday.localName} — {holiday.date}
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  createHolidayTask(holiday.localName, holiday.date)
-                }
+                onPress={() => createHolidayTask(holiday.localName, holiday.date)}
               >
                 <Text style={styles.link}>Create task</Text>
               </TouchableOpacity>
@@ -281,8 +279,7 @@ export default function ApiHubScreen() {
             <>
               <Image source={{ uri: pokemon.data.sprite }} style={styles.pokemon} />
               <Text style={styles.line}>
-                {pokemon.data.name} · H {pokemon.data.height} · W{' '}
-                {pokemon.data.weight}
+                {pokemon.data.name} · H {pokemon.data.height} · W {pokemon.data.weight}
               </Text>
             </>
           ) : null}
@@ -317,9 +314,7 @@ export default function ApiHubScreen() {
           onRefresh={dog.reload}
           animationIndex={7}
         >
-          {dog.data ? (
-            <Image source={{ uri: dog.data }} style={styles.dogImage} />
-          ) : null}
+          {dog.data ? <Image source={{ uri: dog.data }} style={styles.dogImage} /> : null}
         </ApiWidgetCard>
 
         <ApiWidgetCard
@@ -368,9 +363,7 @@ export default function ApiHubScreen() {
         >
           {trivia.data ? (
             <>
-              <Text style={styles.line}>
-                {decodeHtml(trivia.data.question)}
-              </Text>
+              <Text style={styles.line}>{decodeHtml(trivia.data.question)}</Text>
               {trivia.data.incorrectAnswers.map((answer) => (
                 <Text key={answer} style={styles.answer}>
                   • {decodeHtml(answer)}
@@ -395,12 +388,8 @@ export default function ApiHubScreen() {
           loading={meal.loading}
           error={meal.error}
           onRefresh={meal.reload}
-          actionLabel={
-            meal.data ? `Create task: ${meal.data.name}` : undefined
-          }
-          onAction={
-            meal.data ? () => createMealTask(meal.data!.name) : undefined
-          }
+          actionLabel={meal.data ? `Create task: ${meal.data.name}` : undefined}
+          onAction={meal.data ? () => createMealTask(meal.data!.name) : undefined}
           animationIndex={12}
         >
           {meal.data ? (
@@ -439,8 +428,7 @@ export default function ApiHubScreen() {
         >
           {iss.data ? (
             <Text style={styles.line}>
-              Lat {iss.data.latitude.toFixed(2)} · Lon{' '}
-              {iss.data.longitude.toFixed(2)}
+              Lat {iss.data.latitude.toFixed(2)} · Lon {iss.data.longitude.toFixed(2)}
             </Text>
           ) : null}
         </ApiWidgetCard>
@@ -451,46 +439,46 @@ export default function ApiHubScreen() {
 
 function createStyles(colors: ThemeColors) {
   return StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 16, paddingBottom: 32 },
-  subheading: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginBottom: 16,
-    lineHeight: 20,
-  },
-  banner: {
-    backgroundColor: colors.accentLight,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 12,
-  },
-  bannerText: { color: colors.text, marginBottom: 6 },
-  bannerLink: { color: colors.accent, fontWeight: '600' },
-  line: { fontSize: 14, color: colors.text, lineHeight: 22, marginBottom: 4 },
-  answer: { fontSize: 13, color: colors.textSecondary, marginLeft: 4 },
-  correct: {
-    marginTop: 8,
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.success,
-  },
-  link: { color: colors.accent, fontWeight: '600', fontSize: 13 },
-  actionRow: {
-    marginBottom: 8,
-    gap: 4,
-  },
-  personRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    gap: 10,
-  },
-  avatar: { width: 36, height: 36, borderRadius: 18 },
-  personName: { fontSize: 14, fontWeight: '600', color: colors.text },
-  personEmail: { fontSize: 12, color: colors.textSecondary },
-  pokemon: { width: 80, height: 80, marginBottom: 8 },
-  dogImage: { width: '100%', height: 160, borderRadius: 10 },
-  mealImage: { width: '100%', height: 140, borderRadius: 10, marginBottom: 8 },
+    container: { flex: 1, backgroundColor: colors.background },
+    content: { padding: 16, paddingBottom: 32 },
+    subheading: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginBottom: 16,
+      lineHeight: 20,
+    },
+    banner: {
+      backgroundColor: colors.accentLight,
+      borderRadius: 10,
+      padding: 12,
+      marginBottom: 12,
+    },
+    bannerText: { color: colors.text, marginBottom: 6 },
+    bannerLink: { color: colors.accent, fontWeight: '600' },
+    line: { fontSize: 14, color: colors.text, lineHeight: 22, marginBottom: 4 },
+    answer: { fontSize: 13, color: colors.textSecondary, marginLeft: 4 },
+    correct: {
+      marginTop: 8,
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.success,
+    },
+    link: { color: colors.accent, fontWeight: '600', fontSize: 13 },
+    actionRow: {
+      marginBottom: 8,
+      gap: 4,
+    },
+    personRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8,
+      gap: 10,
+    },
+    avatar: { width: 36, height: 36, borderRadius: 18 },
+    personName: { fontSize: 14, fontWeight: '600', color: colors.text },
+    personEmail: { fontSize: 12, color: colors.textSecondary },
+    pokemon: { width: 80, height: 80, marginBottom: 8 },
+    dogImage: { width: '100%', height: 160, borderRadius: 10 },
+    mealImage: { width: '100%', height: 140, borderRadius: 10, marginBottom: 8 },
   });
 }

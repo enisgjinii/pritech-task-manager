@@ -33,12 +33,7 @@ export default function PrimaryButton({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        styles[variant],
-        isDisabled && styles.disabled,
-        style,
-      ]}
+      style={[styles.button, styles[variant], isDisabled && styles.disabled, style]}
       onPress={onPress}
       disabled={isDisabled}
       activeOpacity={0.85}

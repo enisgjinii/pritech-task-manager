@@ -75,9 +75,7 @@ export default function SettingsScreen() {
               onPress={handleClearAllCache}
               style={styles.btn}
             />
-            <Text style={styles.hint}>
-              Clears saved tasks and resets onboarding.
-            </Text>
+            <Text style={styles.hint}>Clears saved tasks and resets onboarding.</Text>
           </View>
         </StaggerInView>
 
@@ -85,8 +83,7 @@ export default function SettingsScreen() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>About</Text>
             <Text style={styles.cardBody}>
-              PRITECH Task Manager — a personal task app powered by 15 free public
-              APIs.
+              PRITECH Task Manager — a personal task app powered by 15 free public APIs.
             </Text>
           </View>
         </StaggerInView>

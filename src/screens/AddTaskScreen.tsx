@@ -35,9 +35,7 @@ export default function AddTaskScreen() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [people, setPeople] = useState<TaskOwner[]>([]);
-  const [selectedOwner, setSelectedOwner] = useState<TaskOwner | undefined>(
-    undefined,
-  );
+  const [selectedOwner, setSelectedOwner] = useState<TaskOwner | undefined>(undefined);
 
   const loadPeople = useCallback(async () => {
     try {
@@ -79,61 +77,62 @@ export default function AddTaskScreen() {
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
+        >
           <StaggerInView index={0}>
-          <InputField
-            label="Title"
-            placeholder="Enter task title"
-            value={title}
-            onChangeText={setTitle}
-            error={errors.title}
-            maxLength={100}
-          />
+            <InputField
+              label="Title"
+              placeholder="Enter task title"
+              value={title}
+              onChangeText={setTitle}
+              error={errors.title}
+              maxLength={100}
+            />
           </StaggerInView>
           <StaggerInView index={1}>
-          <InputField
-            label="Description"
-            placeholder="Enter task description"
-            value={description}
-            onChangeText={setDescription}
-            error={errors.description}
-            multiline
-            numberOfLines={4}
-            style={styles.textArea}
-          />
+            <InputField
+              label="Description"
+              placeholder="Enter task description"
+              value={description}
+              onChangeText={setDescription}
+              error={errors.description}
+              multiline
+              numberOfLines={4}
+              style={styles.textArea}
+            />
           </StaggerInView>
 
           <StaggerInView index={2}>
-          <Text style={styles.sectionTitle}>Suggested People (optional)</Text>
-          <Text style={styles.sectionHint}>Random User API</Text>
+            <Text style={styles.sectionTitle}>Suggested People (optional)</Text>
+            <Text style={styles.sectionHint}>Random User API</Text>
           </StaggerInView>
           {people.map((person, index) => {
             const selected = selectedOwner?.email === person.email;
             return (
               <StaggerInView key={person.email} index={3 + index}>
-              <TouchableOpacity
-                style={[styles.personRow, selected && styles.personSelected]}
-                onPress={() =>
-                  setSelectedOwner(selected ? undefined : person)
-                }
-              >
-                <Image source={{ uri: person.avatar }} style={styles.avatar} />
-                <View style={styles.personInfo}>
-                  <Text style={styles.personName}>{person.name}</Text>
-                  <Text style={styles.personEmail}>{person.email}</Text>
-                </View>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.personRow, selected && styles.personSelected]}
+                  onPress={() => setSelectedOwner(selected ? undefined : person)}
+                >
+                  <Image source={{ uri: person.avatar }} style={styles.avatar} />
+                  <View style={styles.personInfo}>
+                    <Text style={styles.personName}>{person.name}</Text>
+                    <Text style={styles.personEmail}>{person.email}</Text>
+                  </View>
+                </TouchableOpacity>
               </StaggerInView>
             );
           })}
 
           <StaggerInView index={3 + people.length}>
-          <PrimaryButton
-            title="Add Task"
-            onPress={handleSubmit}
-            loading={saving}
-            style={styles.submit}
-          />
+            <PrimaryButton
+              title="Add Task"
+              onPress={handleSubmit}
+              loading={saving}
+              style={styles.submit}
+            />
           </StaggerInView>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -143,36 +142,36 @@ export default function AddTaskScreen() {
 
 function createStyles(colors: ThemeColors) {
   return StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  flex: { flex: 1 },
-  content: { padding: 16 },
-  textArea: { minHeight: 110, textAlignVertical: 'top' },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 4,
-  },
-  sectionHint: {
-    fontSize: 12,
-    color: colors.textMuted,
-    marginBottom: 10,
-  },
-  personRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  personSelected: { borderColor: colors.accent, backgroundColor: colors.accentLight },
-  avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
-  personInfo: { flex: 1 },
-  personName: { fontSize: 14, fontWeight: '600', color: colors.text },
-  personEmail: { fontSize: 12, color: colors.textSecondary },
-  submit: { marginTop: 12 },
+    container: { flex: 1, backgroundColor: colors.background },
+    flex: { flex: 1 },
+    content: { padding: 16 },
+    textArea: { minHeight: 110, textAlignVertical: 'top' },
+    sectionTitle: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 4,
+    },
+    sectionHint: {
+      fontSize: 12,
+      color: colors.textMuted,
+      marginBottom: 10,
+    },
+    personRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.surface,
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    personSelected: { borderColor: colors.accent, backgroundColor: colors.accentLight },
+    avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
+    personInfo: { flex: 1 },
+    personName: { fontSize: 14, fontWeight: '600', color: colors.text },
+    personEmail: { fontSize: 12, color: colors.textSecondary },
+    submit: { marginTop: 12 },
   });
 }

@@ -1,5 +1,13 @@
 import { useMemo } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,7 +32,13 @@ const MENU_ITEMS: {
 }[] = [
   { route: 'Tabs', tab: 'Tasks', label: 'My Tasks', icon: 'checkbox-outline' },
   { route: 'Tabs', tab: 'ApiHub', label: 'API Hub', icon: 'planet-outline' },
-  { route: 'Tabs', tab: 'Tasks', screen: 'AddTask', label: 'Add Task', icon: 'add-circle-outline' },
+  {
+    route: 'Tabs',
+    tab: 'Tasks',
+    screen: 'AddTask',
+    label: 'Add Task',
+    icon: 'add-circle-outline',
+  },
   { route: 'Tabs', tab: 'Settings', label: 'Settings', icon: 'settings-outline' },
 ];
 

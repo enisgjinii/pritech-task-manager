@@ -28,18 +28,14 @@ export default function ThemeSelector() {
               onPress={() => setThemeMode(option.key)}
               activeOpacity={0.85}
             >
-              <Text
-                style={[styles.optionText, selected && styles.optionTextSelected]}
-              >
+              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>
                 {option.label}
               </Text>
             </TouchableOpacity>
           );
         })}
       </View>
-      <Text style={styles.hint}>
-        System follows your device light or dark setting.
-      </Text>
+      <Text style={styles.hint}>System follows your device light or dark setting.</Text>
     </View>
   );
 }

@@ -71,28 +71,28 @@ export default function OnboardingScreen({ navigation }: Props) {
 
       <ScrollView contentContainerStyle={styles.content}>
         <FadeInView>
-        <View style={styles.logoWrap}>
-          <Image source={logo} style={styles.logo} resizeMode="contain" />
-        </View>
+          <View style={styles.logoWrap}>
+            <Image source={logo} style={styles.logo} resizeMode="contain" />
+          </View>
         </FadeInView>
 
         <SlidePanel panelKey={step}>
-        <Text style={styles.stepLabel}>
-          Step {step + 1} of {SLIDES.length}
-        </Text>
-        <Text style={styles.title}>{slide.title}</Text>
-        <Text style={styles.body}>{slide.body}</Text>
+          <Text style={styles.stepLabel}>
+            Step {step + 1} of {SLIDES.length}
+          </Text>
+          <Text style={styles.title}>{slide.title}</Text>
+          <Text style={styles.body}>{slide.body}</Text>
         </SlidePanel>
 
         <FadeInView delay={100}>
-        <View style={styles.dots}>
-          {SLIDES.map((_, index) => (
-            <View
-              key={index}
-              style={[styles.dot, index === step && styles.dotActive]}
-            />
-          ))}
-        </View>
+          <View style={styles.dots}>
+            {SLIDES.map((_, index) => (
+              <View
+                key={index}
+                style={[styles.dot, index === step && styles.dotActive]}
+              />
+            ))}
+          </View>
         </FadeInView>
       </ScrollView>
 
@@ -113,11 +113,7 @@ export default function OnboardingScreen({ navigation }: Props) {
               onPress={finish}
               style={styles.footerBtnHalf}
             />
-            <PrimaryButton
-              title="Next"
-              onPress={goNext}
-              style={styles.footerBtnHalf}
-            />
+            <PrimaryButton title="Next" onPress={goNext} style={styles.footerBtnHalf} />
           </View>
         ) : (
           <View style={styles.footerRow}>
@@ -141,81 +137,81 @@ export default function OnboardingScreen({ navigation }: Props) {
 
 function createStyles(colors: ThemeColors) {
   return StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  topBack: {
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
-  topBackPlaceholder: {
-    height: 40,
-  },
-  topBackText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.accent,
-  },
-  content: {
-    flexGrow: 1,
-    padding: 24,
-    justifyContent: 'center',
-  },
-  logoWrap: {
-    alignSelf: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  logo: { width: 200, height: 56 },
-  stepLabel: {
-    textAlign: 'center',
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.textMuted,
-    marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  body: {
-    fontSize: 16,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  dots: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-    marginTop: 32,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.border,
-  },
-  dotActive: { backgroundColor: colors.accent, width: 20 },
-  footer: {
-    padding: 20,
-    gap: 10,
-  },
-  footerRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  footerBtnHalf: {
-    flex: 1,
-    marginBottom: 0,
-  },
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    topBack: {
+      paddingHorizontal: 20,
+      paddingVertical: 8,
+    },
+    topBackPlaceholder: {
+      height: 40,
+    },
+    topBackText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.accent,
+    },
+    content: {
+      flexGrow: 1,
+      padding: 24,
+      justifyContent: 'center',
+    },
+    logoWrap: {
+      alignSelf: 'center',
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 24,
+    },
+    logo: { width: 200, height: 56 },
+    stepLabel: {
+      textAlign: 'center',
+      fontSize: 13,
+      fontWeight: '600',
+      color: colors.textMuted,
+      marginBottom: 8,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: 12,
+    },
+    body: {
+      fontSize: 16,
+      color: colors.textSecondary,
+      textAlign: 'center',
+      lineHeight: 24,
+    },
+    dots: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      gap: 8,
+      marginTop: 32,
+    },
+    dot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: colors.border,
+    },
+    dotActive: { backgroundColor: colors.accent, width: 20 },
+    footer: {
+      padding: 20,
+      gap: 10,
+    },
+    footerRow: {
+      flexDirection: 'row',
+      gap: 8,
+    },
+    footerBtnHalf: {
+      flex: 1,
+      marginBottom: 0,
+    },
   });
 }

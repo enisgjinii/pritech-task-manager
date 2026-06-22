@@ -1,6 +1,6 @@
 import { HeaderBackButton } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
@@ -15,11 +15,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen';
 import { TabParamList, TasksStackParamList } from '../types/task';
-import {
-  apiHubTabIcon,
-  settingsTabIcon,
-  tasksTabIcon,
-} from '../utils/nativeTabIcons';
+import { apiHubTabIcon, settingsTabIcon, tasksTabIcon } from '../utils/nativeTabIcons';
 
 const NativeTab = createNativeBottomTabNavigator<TabParamList>();
 const JsTab = createBottomTabNavigator<TabParamList>();
@@ -35,6 +31,23 @@ const ANDROID_TAB_ICONS: Record<
   ApiHub: { default: 'planet-outline', focused: 'planet' },
   Settings: { default: 'settings-outline', focused: 'settings' },
 };
+
+function stackBackButton(
+  colors: { headerText: string },
+  navigation: { goBack: () => void },
+) {
+  function StackBackButton(props: React.ComponentProps<typeof HeaderBackButton>) {
+    return (
+      <HeaderBackButton
+        {...props}
+        tintColor={colors.headerText}
+        onPress={() => navigation.goBack()}
+      />
+    );
+  }
+  StackBackButton.displayName = 'StackBackButton';
+  return StackBackButton;
+}
 
 function TasksStackNavigator() {
   const { colors } = useTheme();
@@ -61,20 +74,17 @@ function TasksStackNavigator() {
       <TasksStack.Screen
         name="TaskDetails"
         component={TaskDetailsScreen}
-        options={{ title: 'Task Details' }}
+        options={({ navigation }) => ({
+          title: 'Task Details',
+          headerLeft: stackBackButton(colors, navigation),
+        })}
       />
       <TasksStack.Screen
         name="AddTask"
         component={AddTaskScreen}
         options={({ navigation }) => ({
           title: 'Add New Task',
-          headerLeft: (props) => (
-            <HeaderBackButton
-              {...props}
-              tintColor={colors.headerText}
-              onPress={() => navigation.goBack()}
-            />
-          ),
+          headerLeft: stackBackButton(colors, navigation),
         })}
       />
     </TasksStack.Navigator>
