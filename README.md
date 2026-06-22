@@ -175,11 +175,26 @@ APK and IPA builds run on [Expo EAS](https://expo.dev/accounts/enisgjini20/proje
 
 ```bash
 npm run build:android:apk   # Start Android APK build in the cloud
-npm run build:ios:ipa       # Start iOS IPA build (Apple credentials required)
+npm run build:ios:ipa       # First iOS build — run in your terminal (Apple login required)
+npm run build:ios:ipa:ci    # After credentials exist — non-interactive CI builds
 
 # After a build finishes:
 npm run build:android:download
 npm run build:ios:download
+```
+
+**First iOS IPA build** must be run locally in your terminal (not non-interactive). EAS will prompt you to sign in with your Apple Developer account and create signing credentials automatically. You need a paid [Apple Developer Program](https://developer.apple.com/programs/) membership for device installs.
+
+```bash
+npm run build:ios:ipa
+```
+
+Follow the prompts: log in with Apple ID → allow EAS to manage credentials → wait for the cloud build. Track progress at [EAS builds](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager/builds).
+
+To install on a physical iPhone (ad hoc), register the device first:
+
+```bash
+npx eas-cli@latest device:create
 ```
 
 Artifacts are saved to `./dist/`. You can also download builds from the [EAS dashboard](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager/builds).
