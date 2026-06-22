@@ -1,3 +1,4 @@
+import { HeaderBackButton } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo } from 'react';
 import { Platform, View } from 'react-native';
@@ -65,7 +66,16 @@ function TasksStackNavigator() {
       <TasksStack.Screen
         name="AddTask"
         component={AddTaskScreen}
-        options={{ title: 'Add New Task' }}
+        options={({ navigation }) => ({
+          title: 'Add New Task',
+          headerLeft: (props) => (
+            <HeaderBackButton
+              {...props}
+              tintColor={colors.headerText}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+        })}
       />
     </TasksStack.Navigator>
   );
