@@ -1,34 +1,59 @@
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useTheme } from 'react-native-paper';
 
-import AppHeader from '../components/AppHeader';
+import { colors } from '../constants/colors';
+import { isOnboardingComplete } from '../storage/onboardingStorage';
 import AddTaskScreen from '../screens/AddTaskScreen';
+import ApiHubScreen from '../screens/ApiHubScreen';
+import HomeScreen from '../screens/HomeScreen';
+import OnboardingScreen from '../screens/OnboardingScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen';
-import TaskListScreen from '../screens/TaskListScreen';
-import { RootStackParamList } from '../types/Task';
+import { RootStackParamList } from '../types/task';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
-  const theme = useTheme();
+  const [ready, setReady] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+
+  useEffect(() => {
+    isOnboardingComplete().then((done) => {
+      setShowOnboarding(!done);
+      setReady(true);
+    });
+  }, []);
+
+  if (!ready) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={colors.accent} />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName={showOnboarding ? 'Onboarding' : 'Home'}
         screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.primary },
-          headerTintColor: theme.colors.onPrimary,
+          headerStyle: { backgroundColor: colors.primary },
+          headerTintColor: '#FFFFFF',
           headerTitleStyle: { fontWeight: '600' },
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: theme.colors.background },
-          animation: 'slide_from_right',
+          contentStyle: { backgroundColor: colors.background },
         }}
       >
         <Stack.Screen
-          name="TaskList"
-          component={TaskListScreen}
-          options={{ headerTitle: () => <AppHeader /> }}
+          name="Onboarding"
+          component={OnboardingScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'My Tasks' }}
         />
         <Stack.Screen
           name="AddTask"
@@ -39,6 +64,11 @@ export default function AppNavigator() {
           name="TaskDetails"
           component={TaskDetailsScreen}
           options={{ title: 'Task Details' }}
+        />
+        <Stack.Screen
+          name="ApiHub"
+          component={ApiHubScreen}
+          options={{ title: 'Public API Hub' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
