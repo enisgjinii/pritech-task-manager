@@ -28,7 +28,7 @@ export type TaskFilter = 'all' | 'active' | 'completed';
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  MainDrawer: undefined;
+  MainDrawer: NavigatorScreenParams<DrawerParamList> | undefined;
 };
 
 export type DrawerParamList = {

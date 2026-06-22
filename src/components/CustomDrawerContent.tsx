@@ -33,9 +33,9 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const tabsRoute = state.routes.find((route) => route.name === 'Tabs');
   const tabState = tabsRoute?.state;
   const activeTabName = tabState?.routes[tabState.index ?? 0]?.name;
-
+  const tasksTabRoute = tabState?.routes.find((route) => route.name === 'Tasks');
   const activeTasksScreen =
-    activeTabName === 'Tasks' && tabState?.routes[tabState.index ?? 0]?.name;
+    tasksTabRoute?.state?.routes[tasksTabRoute.state.index ?? 0]?.name;
 
   const navigateToTab = (tab: 'Tasks' | 'ApiHub' | 'Settings', screen?: 'AddTask') => {
     if (screen) {

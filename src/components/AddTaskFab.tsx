@@ -1,26 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
-import { NativeBottomTabNavigationProp } from '@react-navigation/bottom-tabs/unstable';
-import { useNavigation, useNavigationState } from '@react-navigation/native';
+import { useNavigationState } from '@react-navigation/native';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '../constants/colors';
-import { TabParamList } from '../types/task';
+import {
+  isAddTaskScreenOpen,
+  navigateToAddTask,
+} from '../navigation/navigationRef';
 
 const TAB_BAR_HEIGHT = 49;
 
 export default function AddTaskFab() {
-  const navigation = useNavigation<NativeBottomTabNavigationProp<TabParamList>>();
   const insets = useSafeAreaInsets();
 
-  const isAddTaskOpen = useNavigationState((state) => {
-    const tabRoute = state.routes[state.index];
-    if (tabRoute.name !== 'Tasks') return false;
-    const tasksState = tabRoute.state;
-    if (!tasksState) return false;
-    const screen = tasksState.routes[tasksState.index ?? 0];
-    return screen.name === 'AddTask';
-  });
+  const isAddTaskOpen = useNavigationState(isAddTaskScreenOpen);
 
   if (isAddTaskOpen) return null;
 
@@ -30,7 +24,7 @@ export default function AddTaskFab() {
         styles.fab,
         { bottom: insets.bottom + TAB_BAR_HEIGHT + 8 },
       ]}
-      onPress={() => navigation.navigate('Tasks', { screen: 'AddTask' })}
+      onPress={navigateToAddTask}
       activeOpacity={0.9}
       accessibilityRole="button"
       accessibilityLabel="Add new task"
