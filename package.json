@@ -43,10 +43,10 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint && npm run format:check",
-    "build:android:apk": "eas build --platform android --profile preview --non-interactive",
-    "build:android:download": "eas build:download --platform android --latest --output ./dist/pritech-task-manager.apk",
-    "build:ios:ipa": "eas build --platform ios --profile preview --non-interactive",
-    "build:ios:download": "eas build:download --platform ios --latest --output ./dist/pritech-task-manager.ipa"
+    "build:android:apk": "npx eas-cli@latest build --platform android --profile preview --non-interactive",
+    "build:android:download": "npx eas-cli@latest build:download --platform android --latest --output ./dist/pritech-task-manager.apk",
+    "build:ios:ipa": "npx eas-cli@latest build --platform ios --profile preview --non-interactive",
+    "build:ios:download": "npx eas-cli@latest build:download --platform ios --latest --output ./dist/pritech-task-manager.ipa"
   },
   "private": true
 }

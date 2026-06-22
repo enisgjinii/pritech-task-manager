@@ -76,6 +76,21 @@ npx expo start
 
 Run on iOS Simulator, Android Emulator, or Expo Go.
 
+## Release Builds (EAS Cloud — no Java / Gradle)
+
+APK and IPA are built on [Expo EAS](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager) — no local Android SDK or Java required.
+
+```bash
+npm run build:android:apk   # Start Android APK build in the cloud
+npm run build:ios:ipa       # Start iOS IPA build (Apple credentials required)
+
+# After a build finishes:
+npm run build:android:download
+npm run build:ios:download
+```
+
+Artifacts land in `./dist/`. You can also download from the EAS dashboard.
+
 ## AsyncStorage
 
 Tasks and onboarding status are stored locally:
