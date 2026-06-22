@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   ActivityIndicator,
   Card,
@@ -7,6 +7,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 
+import { MotionView } from './motion';
 import { Quote } from '../services/quoteApi';
 
 interface QuoteCardProps {
@@ -25,49 +26,60 @@ export default function QuoteCard({
   const theme = useTheme();
 
   return (
-    <Card mode="elevated" style={[styles.card, { borderLeftColor: theme.colors.secondary }]}>
-      <Card.Title
-        title="Daily Motivation"
-        titleStyle={[styles.title, { color: theme.colors.secondary }]}
-        left={(props) => (
-          <IconButton
-            {...props}
-            icon="format-quote-close"
-            iconColor={theme.colors.secondary}
-            size={20}
-            style={styles.titleIcon}
-          />
-        )}
-        right={() => (
-          <IconButton
-            icon="refresh"
-            iconColor={theme.colors.secondary}
-            size={20}
-            onPress={onRefresh}
-            disabled={loading}
-            accessibilityLabel="Refresh quote"
-          />
-        )}
-      />
-      <Card.Content style={styles.content}>
-        {loading ? (
-          <ActivityIndicator animating color={theme.colors.secondary} style={styles.loader} />
-        ) : error ? (
-          <Text variant="bodyMedium" style={styles.errorText}>
-            {error}
-          </Text>
-        ) : quote ? (
-          <>
-            <Text variant="bodyMedium" style={styles.quote}>
-              "{quote.content}"
-            </Text>
-            <Text variant="bodySmall" style={styles.author}>
-              — {quote.author}
-            </Text>
-          </>
-        ) : null}
-      </Card.Content>
-    </Card>
+    <MotionView variant="fadeInDown" delay={0}>
+      <Card
+        mode="elevated"
+        style={[styles.card, { borderLeftColor: theme.colors.secondary }]}
+      >
+        <Card.Title
+          title="Daily Motivation"
+          titleStyle={[styles.title, { color: theme.colors.secondary }]}
+          left={(props) => (
+            <IconButton
+              {...props}
+              icon="format-quote-close"
+              iconColor={theme.colors.secondary}
+              size={20}
+              style={styles.titleIcon}
+            />
+          )}
+          right={() => (
+            <IconButton
+              icon="refresh"
+              iconColor={theme.colors.secondary}
+              size={20}
+              onPress={onRefresh}
+              disabled={loading}
+              accessibilityLabel="Refresh quote"
+            />
+          )}
+        />
+        <Card.Content style={styles.content}>
+          {loading ? (
+            <ActivityIndicator
+              animating
+              color={theme.colors.secondary}
+              style={styles.loader}
+            />
+          ) : error ? (
+            <MotionView variant="fadeIn" key="quote-error">
+              <Text variant="bodyMedium" style={styles.errorText}>
+                {error}
+              </Text>
+            </MotionView>
+          ) : quote ? (
+            <MotionView variant="fadeInUp" key={`quote-${quote.content.slice(0, 12)}`}>
+              <Text variant="bodyMedium" style={styles.quote}>
+                "{quote.content}"
+              </Text>
+              <Text variant="bodySmall" style={styles.author}>
+                — {quote.author}
+              </Text>
+            </MotionView>
+          ) : null}
+        </Card.Content>
+      </Card>
+    </MotionView>
   );
 }
 

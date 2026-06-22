@@ -15,6 +15,7 @@ import {
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { MotionScreen, MotionView } from '../components/motion';
 import { RootStackParamList, Task } from '../types/Task';
 import { formatDate } from '../utils/date';
 import {
@@ -72,104 +73,127 @@ export default function TaskDetailsScreen() {
       <SafeAreaView
         style={[styles.container, { backgroundColor: theme.colors.background }]}
       >
-        <View style={styles.loadingContainer}>
+        <MotionView variant="fadeIn" styles={styles.loadingContainer}>
           <ActivityIndicator animating color={theme.colors.primary} />
           <Text variant="bodyLarge" style={styles.loadingText}>
             Loading...
           </Text>
-        </View>
+        </MotionView>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['bottom']}
-    >
-      <ScrollView contentContainerStyle={styles.content}>
-        <Card mode="elevated" style={styles.card}>
-          <Card.Content>
-            <View style={styles.statusRow}>
-              <Chip
-                compact
-                mode="flat"
-                style={[
-                  styles.chip,
-                  task.completed ? styles.chipCompleted : styles.chipActive,
-                ]}
-                textStyle={{
-                  color: task.completed ? theme.colors.tertiary : theme.colors.secondary,
-                  fontWeight: '600',
-                  fontSize: 12,
-                }}
-              >
-                {task.completed ? 'Completed' : 'Active'}
-              </Chip>
-              <View style={styles.dateRow}>
-                <Icon source="calendar-outline" size={14} color={theme.colors.onSurfaceVariant} />
-                <Text variant="labelMedium" style={styles.date}>
-                  {formatDate(task.createdAt)}
+    <MotionScreen variant="slideInRight">
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+        edges={['bottom']}
+      >
+        <ScrollView contentContainerStyle={styles.content}>
+          <MotionView variant="fadeInUp" delay={0}>
+            <Card mode="elevated" style={styles.card}>
+              <Card.Content>
+                <View style={styles.statusRow}>
+                  <Chip
+                    compact
+                    mode="flat"
+                    style={[
+                      styles.chip,
+                      task.completed ? styles.chipCompleted : styles.chipActive,
+                    ]}
+                    textStyle={{
+                      color: task.completed
+                        ? theme.colors.tertiary
+                        : theme.colors.secondary,
+                      fontWeight: '600',
+                      fontSize: 12,
+                    }}
+                  >
+                    {task.completed ? 'Completed' : 'Active'}
+                  </Chip>
+                  <View style={styles.dateRow}>
+                    <Icon
+                      source="calendar-outline"
+                      size={14}
+                      color={theme.colors.onSurfaceVariant}
+                    />
+                    <Text variant="labelMedium" style={styles.date}>
+                      {formatDate(task.createdAt)}
+                    </Text>
+                  </View>
+                </View>
+
+                <Text
+                  variant="headlineSmall"
+                  style={[styles.title, task.completed && styles.titleCompleted]}
+                >
+                  {task.title}
                 </Text>
-              </View>
-            </View>
 
-            <Text
-              variant="headlineSmall"
-              style={[styles.title, task.completed && styles.titleCompleted]}
+                <Text variant="labelMedium" style={styles.sectionLabel}>
+                  Description
+                </Text>
+                <Text variant="bodyLarge" style={styles.description}>
+                  {task.description}
+                </Text>
+              </Card.Content>
+            </Card>
+          </MotionView>
+
+          <MotionView variant="fadeInUp" delay={100}>
+            <Button
+              mode={task.completed ? 'outlined' : 'contained-tonal'}
+              onPress={handleToggle}
+              style={styles.button}
+              contentStyle={styles.buttonContent}
+              icon={
+                task.completed ? 'checkbox-blank-outline' : 'check-circle-outline'
+              }
             >
-              {task.title}
-            </Text>
-
-            <Text variant="labelMedium" style={styles.sectionLabel}>
-              Description
-            </Text>
-            <Text variant="bodyLarge" style={styles.description}>
-              {task.description}
-            </Text>
-          </Card.Content>
-        </Card>
-
-        <Button
-          mode={task.completed ? 'outlined' : 'contained-tonal'}
-          onPress={handleToggle}
-          style={styles.button}
-          contentStyle={styles.buttonContent}
-          icon={task.completed ? 'checkbox-blank-outline' : 'check-circle-outline'}
-        >
-          {task.completed ? 'Mark as Not Completed' : 'Mark as Completed'}
-        </Button>
-
-        <Button
-          mode="contained"
-          buttonColor={theme.colors.error}
-          textColor={theme.colors.onError}
-          onPress={() => setDeleteVisible(true)}
-          style={styles.button}
-          contentStyle={styles.buttonContent}
-          icon="delete-outline"
-        >
-          Delete Task
-        </Button>
-      </ScrollView>
-
-      <Portal>
-        <Dialog visible={deleteVisible} onDismiss={() => setDeleteVisible(false)}>
-          <Dialog.Title>Delete Task</Dialog.Title>
-          <Dialog.Content>
-            <Text variant="bodyMedium">
-              Are you sure you want to delete this task?
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setDeleteVisible(false)}>Cancel</Button>
-            <Button textColor={theme.colors.error} onPress={handleConfirmDelete}>
-              Delete
+              {task.completed ? 'Mark as Not Completed' : 'Mark as Completed'}
             </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </SafeAreaView>
+          </MotionView>
+
+          <MotionView variant="fadeInUp" delay={160}>
+            <Button
+              mode="contained"
+              buttonColor={theme.colors.error}
+              textColor={theme.colors.onError}
+              onPress={() => setDeleteVisible(true)}
+              style={styles.button}
+              contentStyle={styles.buttonContent}
+              icon="delete-outline"
+            >
+              Delete Task
+            </Button>
+          </MotionView>
+        </ScrollView>
+
+        <Portal>
+          {deleteVisible && (
+            <MotionView variant="scaleIn">
+              <Dialog visible onDismiss={() => setDeleteVisible(false)}>
+                <Dialog.Title>Delete Task</Dialog.Title>
+                <Dialog.Content>
+                  <Text variant="bodyMedium">
+                    Are you sure you want to delete this task?
+                  </Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={() => setDeleteVisible(false)}>Cancel</Button>
+                  <Button
+                    textColor={theme.colors.error}
+                    onPress={handleConfirmDelete}
+                  >
+                    Delete
+                  </Button>
+                </Dialog.Actions>
+              </Dialog>
+            </MotionView>
+          )}
+        </Portal>
+      </SafeAreaView>
+    </MotionScreen>
   );
 }
 

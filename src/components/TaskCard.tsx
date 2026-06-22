@@ -61,7 +61,11 @@ export default function TaskCard({
                 ]}
                 textStyle={[
                   styles.chipText,
-                  { color: task.completed ? theme.colors.tertiary : theme.colors.secondary },
+                  {
+                    color: task.completed
+                      ? theme.colors.tertiary
+                      : theme.colors.secondary,
+                  },
                 ]}
               >
                 {task.completed ? 'Completed' : 'Active'}

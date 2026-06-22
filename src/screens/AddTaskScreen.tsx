@@ -10,6 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Button, HelperText, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { MotionScreen, MotionView } from '../components/motion';
 import { RootStackParamList } from '../types/Task';
 import { generateId } from '../utils/date';
 import { addTask } from '../utils/storage';
@@ -71,60 +72,68 @@ export default function AddTaskScreen() {
   };
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['bottom']}
-    >
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <MotionScreen variant="slideInRight">
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+        edges={['bottom']}
       >
-        <ScrollView
-          contentContainerStyle={styles.content}
-          keyboardShouldPersistTaps="handled"
+        <KeyboardAvoidingView
+          style={styles.flex}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <TextInput
-            label="Title"
-            placeholder="Enter task title"
-            mode="outlined"
-            value={title}
-            onChangeText={setTitle}
-            error={!!errors.title}
-            maxLength={100}
-            style={styles.input}
-          />
-          <HelperText type="error" visible={!!errors.title}>
-            {errors.title}
-          </HelperText>
-
-          <TextInput
-            label="Description"
-            placeholder="Enter task description"
-            mode="outlined"
-            value={description}
-            onChangeText={setDescription}
-            error={!!errors.description}
-            multiline
-            numberOfLines={4}
-            style={[styles.input, styles.textArea]}
-          />
-          <HelperText type="error" visible={!!errors.description}>
-            {errors.description}
-          </HelperText>
-
-          <Button
-            mode="contained"
-            onPress={handleSubmit}
-            loading={saving}
-            disabled={saving}
-            style={styles.button}
-            contentStyle={styles.buttonContent}
+          <ScrollView
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="handled"
           >
-            Add Task
-          </Button>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            <MotionView variant="fadeInUp" delay={0}>
+              <TextInput
+                label="Title"
+                placeholder="Enter task title"
+                mode="outlined"
+                value={title}
+                onChangeText={setTitle}
+                error={!!errors.title}
+                maxLength={100}
+                style={styles.input}
+              />
+              <HelperText type="error" visible={!!errors.title}>
+                {errors.title}
+              </HelperText>
+            </MotionView>
+
+            <MotionView variant="fadeInUp" delay={80}>
+              <TextInput
+                label="Description"
+                placeholder="Enter task description"
+                mode="outlined"
+                value={description}
+                onChangeText={setDescription}
+                error={!!errors.description}
+                multiline
+                numberOfLines={4}
+                style={[styles.input, styles.textArea]}
+              />
+              <HelperText type="error" visible={!!errors.description}>
+                {errors.description}
+              </HelperText>
+            </MotionView>
+
+            <MotionView variant="fadeInUp" delay={160}>
+              <Button
+                mode="contained"
+                onPress={handleSubmit}
+                loading={saving}
+                disabled={saving}
+                style={styles.button}
+                contentStyle={styles.buttonContent}
+              >
+                Add Task
+              </Button>
+            </MotionView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </MotionScreen>
   );
 }
 

@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
+  Button,
   Dialog,
   FAB,
   Portal,
   Searchbar,
   Text,
-  Button,
   useTheme,
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,6 +17,12 @@ import EmptyState from '../components/EmptyState';
 import FilterTabs from '../components/FilterTabs';
 import QuoteCard from '../components/QuoteCard';
 import TaskCard from '../components/TaskCard';
+import {
+  AnimatedExit,
+  MotionListItem,
+  MotionScreen,
+  MotionView,
+} from '../components/motion';
 import { fetchRandomQuote, Quote } from '../services/quoteApi';
 import { RootStackParamList, Task, TaskFilter } from '../types/Task';
 import {
@@ -103,23 +109,24 @@ export default function TaskListScreen() {
       : 'No tasks match your search or filter.';
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['bottom']}
-    >
-      <FlatList
-        data={filteredTasks}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <>
-            <QuoteCard
-              quote={quote}
-              loading={quoteLoading}
-              error={quoteError}
-              onRefresh={loadQuote}
-            />
+    <MotionScreen>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+        edges={['bottom']}
+      >
+        <ScrollView
+          contentContainerStyle={styles.listContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <QuoteCard
+            quote={quote}
+            loading={quoteLoading}
+            error={quoteError}
+            onRefresh={loadQuote}
+          />
 
+          <MotionView variant="fadeInUp" delay={80}>
             <Searchbar
               placeholder="Search tasks by title..."
               value={searchQuery}
@@ -128,57 +135,80 @@ export default function TaskListScreen() {
               inputStyle={styles.searchInput}
               elevation={1}
             />
+          </MotionView>
 
-            <FilterTabs
-              activeFilter={activeFilter}
-              onFilterChange={setActiveFilter}
-            />
-
-            {filteredTasks.length > 0 && (
-              <Text variant="labelMedium" style={styles.resultCount}>
-                {filteredTasks.length} task{filteredTasks.length !== 1 ? 's' : ''}
-              </Text>
-            )}
-          </>
-        }
-        ListEmptyComponent={<EmptyState message={emptyMessage} />}
-        renderItem={({ item }) => (
-          <TaskCard
-            task={item}
-            onPress={() =>
-              navigation.navigate('TaskDetails', { taskId: item.id })
-            }
-            onToggle={() => handleToggle(item.id)}
-            onDelete={() => setTaskToDelete(item)}
+          <FilterTabs
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
           />
-        )}
-      />
 
-      <FAB
-        icon="plus"
-        style={[styles.fab, { backgroundColor: theme.colors.secondary }]}
-        color={theme.colors.onSecondary}
-        onPress={() => navigation.navigate('AddTask')}
-        accessibilityLabel="Add new task"
-      />
+          {filteredTasks.length > 0 && (
+            <MotionView variant="fadeIn" delay={200}>
+              <Text variant="labelMedium" style={styles.resultCount}>
+                {filteredTasks.length} task
+                {filteredTasks.length !== 1 ? 's' : ''}
+              </Text>
+            </MotionView>
+          )}
 
-      <Portal>
-        <Dialog visible={taskToDelete !== null} onDismiss={() => setTaskToDelete(null)}>
-          <Dialog.Title>Delete Task</Dialog.Title>
-          <Dialog.Content>
-            <Text variant="bodyMedium">
-              Are you sure you want to delete this task?
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setTaskToDelete(null)}>Cancel</Button>
-            <Button textColor={theme.colors.error} onPress={handleConfirmDelete}>
-              Delete
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </SafeAreaView>
+          <AnimatedExit>
+            {filteredTasks.map((item, index) => (
+              <MotionListItem key={item.id} index={index} animationId={item.id}>
+                <TaskCard
+                  task={item}
+                  onPress={() =>
+                    navigation.navigate('TaskDetails', { taskId: item.id })
+                  }
+                  onToggle={() => handleToggle(item.id)}
+                  onDelete={() => setTaskToDelete(item)}
+                />
+              </MotionListItem>
+            ))}
+          </AnimatedExit>
+
+          {filteredTasks.length === 0 && (
+            <EmptyState message={emptyMessage} />
+          )}
+        </ScrollView>
+
+        <MotionView variant="scaleIn" delay={280} styles={styles.fabWrap}>
+          <FAB
+            icon="plus"
+            style={[styles.fab, { backgroundColor: theme.colors.secondary }]}
+            color={theme.colors.onSecondary}
+            onPress={() => navigation.navigate('AddTask')}
+            accessibilityLabel="Add new task"
+          />
+        </MotionView>
+
+        <Portal>
+          {taskToDelete !== null && (
+            <MotionView variant="scaleIn" styles={styles.dialogMotion}>
+              <Dialog
+                visible
+                onDismiss={() => setTaskToDelete(null)}
+              >
+                <Dialog.Title>Delete Task</Dialog.Title>
+                <Dialog.Content>
+                  <Text variant="bodyMedium">
+                    Are you sure you want to delete this task?
+                  </Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={() => setTaskToDelete(null)}>Cancel</Button>
+                  <Button
+                    textColor={theme.colors.error}
+                    onPress={handleConfirmDelete}
+                  >
+                    Delete
+                  </Button>
+                </Dialog.Actions>
+              </Dialog>
+            </MotionView>
+          )}
+        </Portal>
+      </SafeAreaView>
+    </MotionScreen>
   );
 }
 
@@ -202,9 +232,13 @@ const styles = StyleSheet.create({
     opacity: 0.6,
     marginBottom: 8,
   },
-  fab: {
+  fabWrap: {
     position: 'absolute',
     right: 20,
     bottom: 24,
+  },
+  fab: {},
+  dialogMotion: {
+    flex: 1,
   },
 });

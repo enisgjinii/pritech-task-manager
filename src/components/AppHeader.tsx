@@ -1,18 +1,21 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import AppLogo from './AppLogo';
+import { MotionView } from './motion';
 
 export default function AppHeader() {
   return (
-    <View style={styles.container}>
-      <View style={styles.logoWrap}>
+    <MotionView variant="slideInLeft" delay={80} styles={styles.container}>
+      <MotionView variant="scaleIn" delay={0} styles={styles.logoWrap}>
         <AppLogo height={20} />
-      </View>
-      <Text variant="titleMedium" style={styles.subtitle}>
-        Task Manager
-      </Text>
-    </View>
+      </MotionView>
+      <MotionView variant="fadeIn" delay={160}>
+        <Text variant="titleMedium" style={styles.subtitle}>
+          Task Manager
+        </Text>
+      </MotionView>
+    </MotionView>
   );
 }
 

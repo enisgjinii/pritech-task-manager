@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { SegmentedButtons } from 'react-native-paper';
 
+import { MotionView } from './motion';
 import { TaskFilter } from '../types/Task';
 
 interface FilterTabsProps {
@@ -13,16 +14,17 @@ export default function FilterTabs({
   onFilterChange,
 }: FilterTabsProps) {
   return (
-    <SegmentedButtons
-      value={activeFilter}
-      onValueChange={(value) => onFilterChange(value as TaskFilter)}
-      style={styles.container}
-      buttons={[
-        { value: 'all', label: 'All' },
-        { value: 'active', label: 'Active' },
-        { value: 'completed', label: 'Completed' },
-      ]}
-    />
+    <MotionView variant="fadeInUp" delay={160} styles={styles.container}>
+      <SegmentedButtons
+        value={activeFilter}
+        onValueChange={(value) => onFilterChange(value as TaskFilter)}
+        buttons={[
+          { value: 'all', label: 'All' },
+          { value: 'active', label: 'Active' },
+          { value: 'completed', label: 'Completed' },
+        ]}
+      />
+    </MotionView>
   );
 }
 
