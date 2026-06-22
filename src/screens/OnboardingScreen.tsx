@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -38,6 +39,7 @@ const SLIDES = [
 export default function OnboardingScreen({ navigation }: Props) {
   const [step, setStep] = useState(0);
   const slide = SLIDES[step];
+  const isFirst = step === 0;
   const isLast = step === SLIDES.length - 1;
 
   const finish = async () => {
@@ -45,13 +47,32 @@ export default function OnboardingScreen({ navigation }: Props) {
     navigation.replace('Home');
   };
 
+  const goBack = () => {
+    if (step > 0) setStep((s) => s - 1);
+  };
+
+  const goNext = () => {
+    if (step < SLIDES.length - 1) setStep((s) => s + 1);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      {!isFirst ? (
+        <TouchableOpacity style={styles.topBack} onPress={goBack}>
+          <Text style={styles.topBackText}>← Back</Text>
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.topBackPlaceholder} />
+      )}
+
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.logoWrap}>
           <Image source={logo} style={styles.logo} resizeMode="contain" />
         </View>
 
+        <Text style={styles.stepLabel}>
+          Step {step + 1} of {SLIDES.length}
+        </Text>
         <Text style={styles.title}>{slide.title}</Text>
         <Text style={styles.body}>{slide.body}</Text>
 
@@ -67,21 +88,41 @@ export default function OnboardingScreen({ navigation }: Props) {
 
       <View style={styles.footer}>
         {!isLast ? (
-          <>
+          <View style={styles.footerRow}>
+            {!isFirst ? (
+              <PrimaryButton
+                title="Back"
+                variant="outline"
+                onPress={goBack}
+                style={styles.footerBtnHalf}
+              />
+            ) : null}
             <PrimaryButton
               title="Skip"
               variant="outline"
               onPress={finish}
-              style={styles.footerBtn}
+              style={styles.footerBtnHalf}
             />
             <PrimaryButton
               title="Next"
-              onPress={() => setStep((s) => s + 1)}
-              style={styles.footerBtn}
+              onPress={goNext}
+              style={styles.footerBtnHalf}
             />
-          </>
+          </View>
         ) : (
-          <PrimaryButton title="Get Started" onPress={finish} />
+          <View style={styles.footerRow}>
+            <PrimaryButton
+              title="Back"
+              variant="outline"
+              onPress={goBack}
+              style={styles.footerBtnHalf}
+            />
+            <PrimaryButton
+              title="Get Started"
+              onPress={finish}
+              style={styles.footerBtnHalf}
+            />
+          </View>
         )}
       </View>
     </SafeAreaView>
@@ -93,6 +134,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  topBack: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+  },
+  topBackPlaceholder: {
+    height: 40,
+  },
+  topBackText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.accent,
+  },
   content: {
     flexGrow: 1,
     padding: 24,
@@ -103,9 +156,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
-    marginBottom: 32,
+    marginBottom: 24,
   },
   logo: { width: 200, height: 56 },
+  stepLabel: {
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.textMuted,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
   title: {
     fontSize: 24,
     fontWeight: '700',
@@ -136,5 +198,12 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 10,
   },
-  footerBtn: { marginBottom: 0 },
+  footerRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  footerBtnHalf: {
+    flex: 1,
+    marginBottom: 0,
+  },
 });

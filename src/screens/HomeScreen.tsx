@@ -25,7 +25,10 @@ import {
 import ApiWidgetCard from '../components/ApiWidgetCard';
 import EmptyState from '../components/EmptyState';
 import TaskCard from '../components/TaskCard';
+import PrimaryButton from '../components/PrimaryButton';
 import { colors } from '../constants/colors';
+import { clearAllAppCache } from '../storage/appCache';
+import { resetOnboarding } from '../storage/onboardingStorage';
 import {
   getStoredTasks,
   toggleStoredTask,
@@ -151,6 +154,35 @@ export default function HomeScreen() {
     setTasks(await deleteStoredTask(taskId));
   };
 
+  const handleReplayOnboarding = async () => {
+    await resetOnboarding();
+    navigation.navigate('Onboarding');
+  };
+
+  const handleClearAllCache = () => {
+    Alert.alert(
+      'Clear All App Data',
+      'This will delete all tasks and reset onboarding. You will see the welcome screens again.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear All',
+          style: 'destructive',
+          onPress: async () => {
+            await clearAllAppCache();
+            setTasks([]);
+            setSearch('');
+            setFilter('all');
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Onboarding' }],
+            });
+          },
+        },
+      ],
+    );
+  };
+
   const filters: { key: TaskFilter; label: string }[] = [
     { key: 'all', label: 'All' },
     { key: 'active', label: 'Active' },
@@ -244,6 +276,26 @@ export default function HomeScreen() {
             onDelete={() => handleDelete(item.id)}
           />
         )}
+        ListFooterComponent={
+          <View style={styles.cacheSection}>
+            <Text style={styles.cacheTitle}>App Data</Text>
+            <PrimaryButton
+              title="View Onboarding Again"
+              variant="outline"
+              onPress={handleReplayOnboarding}
+              style={styles.cacheBtn}
+            />
+            <PrimaryButton
+              title="Clear All App Data"
+              variant="danger"
+              onPress={handleClearAllCache}
+              style={styles.cacheBtn}
+            />
+            <Text style={styles.cacheHint}>
+              Clears saved tasks and resets onboarding.
+            </Text>
+          </View>
+        }
       />
 
       <TouchableOpacity
@@ -374,4 +426,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   modalBtnText: { color: '#FFF', fontWeight: '600' },
+  cacheSection: {
+    marginTop: 24,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  cacheTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 12,
+  },
+  cacheBtn: { marginBottom: 10 },
+  cacheHint: {
+    fontSize: 12,
+    color: colors.textMuted,
+    textAlign: 'center',
+    lineHeight: 18,
+  },
 });
