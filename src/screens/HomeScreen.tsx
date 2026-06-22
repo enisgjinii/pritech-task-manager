@@ -24,6 +24,7 @@ import {
 } from '../api/publicApis';
 import ApiWidgetCard from '../components/ApiWidgetCard';
 import EmptyState from '../components/EmptyState';
+import { FadeInView, ScaleInView } from '../components/motion';
 import TaskCard from '../components/TaskCard';
 import { colors } from '../constants/colors';
 import {
@@ -165,7 +166,9 @@ export default function HomeScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <>
-            <Text style={styles.heading}>My Tasks</Text>
+            <FadeInView>
+              <Text style={styles.heading}>My Tasks</Text>
+            </FadeInView>
 
             <ApiWidgetCard
               title="Daily Productivity Advice"
@@ -173,6 +176,7 @@ export default function HomeScreen() {
               loading={adviceLoading}
               error={adviceError}
               onRefresh={loadAdvice}
+              animationIndex={0}
             >
               <Text style={styles.widgetText}>{advice}</Text>
             </ApiWidgetCard>
@@ -183,10 +187,12 @@ export default function HomeScreen() {
               loading={weatherLoading}
               error={weatherError}
               onRefresh={loadWeather}
+              animationIndex={1}
             >
               <Text style={styles.widgetText}>{weather}</Text>
             </ApiWidgetCard>
 
+            <FadeInView delay={120}>
             <TextInput
               style={styles.search}
               placeholder="Search tasks by title..."
@@ -194,7 +200,9 @@ export default function HomeScreen() {
               value={search}
               onChangeText={setSearch}
             />
+            </FadeInView>
 
+            <FadeInView delay={160}>
             <View style={styles.filterRow}>
               {filters.map((item) => (
                 <TouchableOpacity
@@ -216,6 +224,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               ))}
             </View>
+            </FadeInView>
 
             {filtered.length > 0 ? (
               <Text style={styles.count}>
@@ -235,9 +244,10 @@ export default function HomeScreen() {
             }
           />
         }
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <TaskCard
             task={item}
+            animationIndex={index}
             onPress={() =>
               navigation.navigate('TaskDetails', { taskId: item.id })
             }
@@ -249,7 +259,7 @@ export default function HomeScreen() {
 
       <Modal visible={rewardVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
+          <ScaleInView style={styles.modalCard}>
             <Text style={styles.modalTitle}>Task Completed!</Text>
             {pokemonSprite ? (
               <Image source={{ uri: pokemonSprite }} style={styles.pokemon} />
@@ -264,7 +274,7 @@ export default function HomeScreen() {
             >
               <Text style={styles.modalBtnText}>Nice!</Text>
             </TouchableOpacity>
-          </View>
+          </ScaleInView>
         </View>
       </Modal>
     </SafeAreaView>

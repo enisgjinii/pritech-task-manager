@@ -1,7 +1,8 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View } from 'react-native';
+import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import BottomTabBar from '../components/BottomTabBar';
+import AddTaskFab from '../components/AddTaskFab';
 import DrawerToggleButton from '../components/DrawerToggleButton';
 import { colors } from '../constants/colors';
 import AddTaskScreen from '../screens/AddTaskScreen';
@@ -10,10 +11,14 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen';
 import { TabParamList, TasksStackParamList } from '../types/task';
+import {
+  apiHubTabIcon,
+  settingsTabIcon,
+  tasksTabIcon,
+} from '../utils/nativeTabIcons';
 
-const Tab = createBottomTabNavigator<TabParamList>();
+const Tab = createNativeBottomTabNavigator<TabParamList>();
 const TasksStack = createNativeStackNavigator<TasksStackParamList>();
-const AddStack = createNativeStackNavigator();
 
 const stackScreenOptions = {
   headerStyle: { backgroundColor: colors.primary },
@@ -37,35 +42,52 @@ function TasksStackNavigator() {
         component={TaskDetailsScreen}
         options={{ title: 'Task Details' }}
       />
-    </TasksStack.Navigator>
-  );
-}
-
-function AddStackNavigator() {
-  return (
-    <AddStack.Navigator screenOptions={stackScreenOptions}>
-      <AddStack.Screen
+      <TasksStack.Screen
         name="AddTask"
         component={AddTaskScreen}
         options={{ title: 'Add New Task' }}
       />
-    </AddStack.Navigator>
+    </TasksStack.Navigator>
   );
 }
 
 export default function TabNavigator() {
   return (
-    <Tab.Navigator
-      tabBar={(props) => <BottomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-        sceneStyle: { backgroundColor: colors.background },
-      }}
-    >
-      <Tab.Screen name="Tasks" component={TasksStackNavigator} />
-      <Tab.Screen name="ApiHub" component={ApiHubScreen} />
-      <Tab.Screen name="Add" component={AddStackNavigator} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
-    </Tab.Navigator>
+    <View style={{ flex: 1 }}>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.textMuted,
+          lazy: true,
+        }}
+      >
+        <Tab.Screen
+          name="Tasks"
+          component={TasksStackNavigator}
+          options={{
+            tabBarLabel: 'Tasks',
+            tabBarIcon: tasksTabIcon,
+          }}
+        />
+        <Tab.Screen
+          name="ApiHub"
+          component={ApiHubScreen}
+          options={{
+            tabBarLabel: 'API Hub',
+            tabBarIcon: apiHubTabIcon,
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: 'Settings',
+            tabBarIcon: settingsTabIcon,
+          }}
+        />
+      </Tab.Navigator>
+      <AddTaskFab />
+    </View>
   );
 }

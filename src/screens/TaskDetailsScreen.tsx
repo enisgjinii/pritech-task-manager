@@ -16,6 +16,7 @@ import {
   fetchProgrammingJoke,
 } from '../api/publicApis';
 import ApiWidgetCard from '../components/ApiWidgetCard';
+import { StaggerInView } from '../components/motion';
 import PrimaryButton from '../components/PrimaryButton';
 import StatusBadge from '../components/StatusBadge';
 import { colors } from '../constants/colors';
@@ -136,6 +137,7 @@ export default function TaskDetailsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
+        <StaggerInView index={0}>
         <View style={styles.card}>
           <View style={styles.row}>
             <StatusBadge completed={task.completed} />
@@ -152,13 +154,16 @@ export default function TaskDetailsScreen() {
             </Text>
           ) : null}
         </View>
+        </StaggerInView>
 
+        <StaggerInView index={1}>
         <PrimaryButton
           title={task.completed ? 'Mark as Not Completed' : 'Mark as Completed'}
           variant={task.completed ? 'outline' : 'secondary'}
           onPress={handleToggle}
         />
         <PrimaryButton title="Delete Task" variant="danger" onPress={handleDelete} />
+        </StaggerInView>
 
         <ApiWidgetCard
           title="Productivity Advice"
@@ -166,6 +171,7 @@ export default function TaskDetailsScreen() {
           loading={adviceLoading}
           error={adviceError}
           onRefresh={loadAdvice}
+          animationIndex={2}
         >
           <Text style={styles.helperText}>{advice}</Text>
         </ApiWidgetCard>
@@ -176,6 +182,7 @@ export default function TaskDetailsScreen() {
           loading={jokeLoading}
           error={jokeError}
           onRefresh={loadJoke}
+          animationIndex={3}
         >
           <Text style={styles.helperText}>{joke}</Text>
         </ApiWidgetCard>
@@ -186,6 +193,7 @@ export default function TaskDetailsScreen() {
           loading={catLoading}
           error={catError}
           onRefresh={loadCatFact}
+          animationIndex={4}
         >
           <Text style={styles.helperText}>{catFact}</Text>
         </ApiWidgetCard>

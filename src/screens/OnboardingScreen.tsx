@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import PrimaryButton from '../components/PrimaryButton';
+import { FadeInView, SlidePanel } from '../components/motion';
 import { colors } from '../constants/colors';
 import { setOnboardingComplete } from '../storage/onboardingStorage';
 import { RootStackParamList } from '../types/task';
@@ -66,16 +67,21 @@ export default function OnboardingScreen({ navigation }: Props) {
       )}
 
       <ScrollView contentContainerStyle={styles.content}>
+        <FadeInView>
         <View style={styles.logoWrap}>
           <Image source={logo} style={styles.logo} resizeMode="contain" />
         </View>
+        </FadeInView>
 
+        <SlidePanel panelKey={step}>
         <Text style={styles.stepLabel}>
           Step {step + 1} of {SLIDES.length}
         </Text>
         <Text style={styles.title}>{slide.title}</Text>
         <Text style={styles.body}>{slide.body}</Text>
+        </SlidePanel>
 
+        <FadeInView delay={100}>
         <View style={styles.dots}>
           {SLIDES.map((_, index) => (
             <View
@@ -84,9 +90,10 @@ export default function OnboardingScreen({ navigation }: Props) {
             />
           ))}
         </View>
+        </FadeInView>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <FadeInView delay={150} style={styles.footer}>
         {!isLast ? (
           <View style={styles.footerRow}>
             {!isFirst ? (
@@ -124,7 +131,7 @@ export default function OnboardingScreen({ navigation }: Props) {
             />
           </View>
         )}
-      </View>
+      </FadeInView>
     </SafeAreaView>
   );
 }

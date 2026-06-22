@@ -36,15 +36,15 @@ export type DrawerParamList = {
 };
 
 export type TabParamList = {
-  Tasks: undefined;
+  Tasks: NavigatorScreenParams<TasksStackParamList> | undefined;
   ApiHub: undefined;
-  Add: undefined;
   Settings: undefined;
 };
 
 export type TasksStackParamList = {
   Home: undefined;
   TaskDetails: { taskId: string };
+  AddTask: undefined;
 };
 
 export type AddTaskParams = {

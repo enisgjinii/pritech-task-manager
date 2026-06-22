@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import { colors } from '../constants/colors';
+import { StaggerInView } from './motion';
 
 interface ApiWidgetCardProps {
   title: string;
@@ -19,6 +20,7 @@ interface ApiWidgetCardProps {
   style?: ViewStyle;
   actionLabel?: string;
   onAction?: () => void;
+  animationIndex?: number;
 }
 
 export default function ApiWidgetCard({
@@ -31,9 +33,10 @@ export default function ApiWidgetCard({
   style,
   actionLabel,
   onAction,
+  animationIndex = 0,
 }: ApiWidgetCardProps) {
   return (
-    <View style={[styles.card, style]}>
+    <StaggerInView index={animationIndex} style={[styles.card, style]}>
       <View style={styles.header}>
         <View style={styles.headerText}>
           <Text style={styles.title}>{title}</Text>
@@ -59,7 +62,7 @@ export default function ApiWidgetCard({
           <Text style={styles.actionText}>{actionLabel}</Text>
         </TouchableOpacity>
       ) : null}
-    </View>
+    </StaggerInView>
   );
 }
 

@@ -15,13 +15,14 @@ type DrawerRoute = keyof DrawerParamList;
 
 const MENU_ITEMS: {
   route: DrawerRoute;
-  tab?: 'Tasks' | 'ApiHub' | 'Add' | 'Settings';
+  tab?: 'Tasks' | 'ApiHub' | 'Settings';
+  screen?: 'AddTask';
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
 }[] = [
   { route: 'Tabs', tab: 'Tasks', label: 'My Tasks', icon: 'checkbox-outline' },
   { route: 'Tabs', tab: 'ApiHub', label: 'API Hub', icon: 'planet-outline' },
-  { route: 'Tabs', tab: 'Add', label: 'Add Task', icon: 'add-circle-outline' },
+  { route: 'Tabs', tab: 'Tasks', screen: 'AddTask', label: 'Add Task', icon: 'add-circle-outline' },
   { route: 'Tabs', tab: 'Settings', label: 'Settings', icon: 'settings-outline' },
 ];
 
@@ -33,8 +34,15 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const tabState = tabsRoute?.state;
   const activeTabName = tabState?.routes[tabState.index ?? 0]?.name;
 
-  const navigateToTab = (tab: 'Tasks' | 'ApiHub' | 'Add' | 'Settings') => {
-    navigation.navigate('Tabs', { screen: tab });
+  const activeTasksScreen =
+    activeTabName === 'Tasks' && tabState?.routes[tabState.index ?? 0]?.name;
+
+  const navigateToTab = (tab: 'Tasks' | 'ApiHub' | 'Settings', screen?: 'AddTask') => {
+    if (screen) {
+      navigation.navigate('Tabs', { screen: tab, params: { screen } });
+    } else {
+      navigation.navigate('Tabs', { screen: tab });
+    }
     navigation.closeDrawer();
   };
 
@@ -76,12 +84,14 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
       <ScrollView style={styles.menu} showsVerticalScrollIndicator={false}>
         <Text style={styles.sectionLabel}>Navigation</Text>
         {MENU_ITEMS.map((item) => {
-          const isActive = item.tab === activeTabName;
+          const isActive = item.screen
+            ? activeTasksScreen === 'AddTask'
+            : item.tab === activeTabName && activeTasksScreen !== 'AddTask';
           return (
             <TouchableOpacity
               key={item.label}
               style={[styles.menuItem, isActive && styles.menuItemActive]}
-              onPress={() => item.tab && navigateToTab(item.tab)}
+              onPress={() => item.tab && navigateToTab(item.tab, item.screen)}
               activeOpacity={0.8}
             >
               <Ionicons

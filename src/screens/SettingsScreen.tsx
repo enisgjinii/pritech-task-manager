@@ -1,6 +1,7 @@
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import PrimaryButton from '../components/PrimaryButton';
+import { FadeInView, StaggerInView } from '../components/motion';
 import ScreenHeader from '../components/ScreenHeader';
 import { colors } from '../constants/colors';
 import { resetToOnboarding } from '../navigation/navigationRef';
@@ -35,10 +36,13 @@ export default function SettingsScreen() {
     <View style={styles.container}>
       <ScreenHeader title="Settings" />
       <ScrollView contentContainerStyle={styles.content}>
+        <FadeInView>
         <Text style={styles.subheading}>
           Manage your local app data and preferences.
         </Text>
+        </FadeInView>
 
+        <StaggerInView index={1}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>App Data</Text>
           <Text style={styles.cardBody}>
@@ -62,7 +66,9 @@ export default function SettingsScreen() {
             Clears saved tasks and resets onboarding.
           </Text>
         </View>
+        </StaggerInView>
 
+        <StaggerInView index={2}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>About</Text>
           <Text style={styles.cardBody}>
@@ -70,6 +76,7 @@ export default function SettingsScreen() {
             APIs.
           </Text>
         </View>
+        </StaggerInView>
       </ScrollView>
     </View>
   );

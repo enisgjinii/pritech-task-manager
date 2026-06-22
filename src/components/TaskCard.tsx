@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../constants/colors';
 import { Task } from '../types/task';
 import { formatDate, truncateText } from '../utils/date';
+import { StaggerInView } from './motion';
 import StatusBadge from './StatusBadge';
 
 interface TaskCardProps {
@@ -10,6 +11,7 @@ interface TaskCardProps {
   onPress: () => void;
   onToggle: () => void;
   onDelete: () => void;
+  animationIndex?: number;
 }
 
 export default function TaskCard({
@@ -17,6 +19,7 @@ export default function TaskCard({
   onPress,
   onToggle,
   onDelete,
+  animationIndex = 0,
 }: TaskCardProps) {
   const handleDelete = () => {
     Alert.alert(
@@ -30,6 +33,7 @@ export default function TaskCard({
   };
 
   return (
+    <StaggerInView index={animationIndex}>
     <TouchableOpacity
       style={[styles.card, task.completed && styles.cardCompleted]}
       onPress={onPress}
@@ -74,6 +78,7 @@ export default function TaskCard({
         <Text style={styles.deleteText}>Delete</Text>
       </TouchableOpacity>
     </TouchableOpacity>
+    </StaggerInView>
   );
 }
 

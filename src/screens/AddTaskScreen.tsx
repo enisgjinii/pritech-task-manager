@@ -9,27 +9,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  CompositeNavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { fetchRandomUsers } from '../api/publicApis';
 import InputField from '../components/InputField';
+import { StaggerInView } from '../components/motion';
 import PrimaryButton from '../components/PrimaryButton';
 import { colors } from '../constants/colors';
 import { addStoredTask } from '../storage/taskStorage';
-import { TabParamList, TaskOwner } from '../types/task';
+import { TaskOwner, TasksStackParamList } from '../types/task';
 import { generateId } from '../utils/date';
 import { validateTaskForm } from '../utils/validators';
 
-type AddTaskNav = CompositeNavigationProp<
-  NativeStackNavigationProp<{ AddTask: undefined }, 'AddTask'>,
-  BottomTabNavigationProp<TabParamList>
->;
+type AddTaskNav = NativeStackNavigationProp<TasksStackParamList, 'AddTask'>;
 
 export default function AddTaskScreen() {
   const navigation = useNavigation<AddTaskNav>();
@@ -70,7 +64,7 @@ export default function AddTaskScreen() {
         owner: selectedOwner,
         source: 'manual',
       });
-      navigation.navigate('Tasks');
+      navigation.navigate('Home');
     } finally {
       setSaving(false);
     }
@@ -83,6 +77,7 @@ export default function AddTaskScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+          <StaggerInView index={0}>
           <InputField
             label="Title"
             placeholder="Enter task title"
@@ -91,6 +86,8 @@ export default function AddTaskScreen() {
             error={errors.title}
             maxLength={100}
           />
+          </StaggerInView>
+          <StaggerInView index={1}>
           <InputField
             label="Description"
             placeholder="Enter task description"
@@ -101,14 +98,17 @@ export default function AddTaskScreen() {
             numberOfLines={4}
             style={styles.textArea}
           />
+          </StaggerInView>
 
+          <StaggerInView index={2}>
           <Text style={styles.sectionTitle}>Suggested People (optional)</Text>
           <Text style={styles.sectionHint}>Random User API</Text>
-          {people.map((person) => {
+          </StaggerInView>
+          {people.map((person, index) => {
             const selected = selectedOwner?.email === person.email;
             return (
+              <StaggerInView key={person.email} index={3 + index}>
               <TouchableOpacity
-                key={person.email}
                 style={[styles.personRow, selected && styles.personSelected]}
                 onPress={() =>
                   setSelectedOwner(selected ? undefined : person)
@@ -120,15 +120,18 @@ export default function AddTaskScreen() {
                   <Text style={styles.personEmail}>{person.email}</Text>
                 </View>
               </TouchableOpacity>
+              </StaggerInView>
             );
           })}
 
+          <StaggerInView index={3 + people.length}>
           <PrimaryButton
             title="Add Task"
             onPress={handleSubmit}
             loading={saving}
             style={styles.submit}
           />
+          </StaggerInView>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

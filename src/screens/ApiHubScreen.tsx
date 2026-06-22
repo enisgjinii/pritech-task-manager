@@ -29,6 +29,7 @@ import {
   weatherCodeLabel,
 } from '../api/publicApis';
 import ApiWidgetCard from '../components/ApiWidgetCard';
+import { FadeInView } from '../components/motion';
 import ScreenHeader from '../components/ScreenHeader';
 import { colors } from '../constants/colors';
 import { addStoredTask, mergeImportedTasks } from '../storage/taskStorage';
@@ -155,17 +156,21 @@ export default function ApiHubScreen() {
     <View style={styles.container}>
       <ScreenHeader title="Public API Hub" />
       <ScrollView contentContainerStyle={styles.content}>
+        <FadeInView>
         <Text style={styles.subheading}>
           Explore all free APIs used in this app. Each card loads independently.
         </Text>
+        </FadeInView>
 
         {importMessage ? (
+          <FadeInView delay={80}>
           <View style={styles.banner}>
             <Text style={styles.bannerText}>{importMessage}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Tasks')}>
               <Text style={styles.bannerLink}>View tasks</Text>
             </TouchableOpacity>
           </View>
+          </FadeInView>
         ) : null}
 
         <ApiWidgetCard
@@ -176,6 +181,7 @@ export default function ApiHubScreen() {
           onRefresh={dummy.reload}
           actionLabel="Import DummyJSON Tasks"
           onAction={importDummy}
+          animationIndex={0}
         >
           {dummy.data?.slice(0, 3).map((item) => (
             <Text key={item.id} style={styles.line}>
@@ -192,6 +198,7 @@ export default function ApiHubScreen() {
           onRefresh={placeholder.reload}
           actionLabel="Import JSONPlaceholder Tasks"
           onAction={importPlaceholder}
+          animationIndex={1}
         >
           {placeholder.data?.slice(0, 3).map((item) => (
             <Text key={item.id} style={styles.line}>
@@ -206,6 +213,7 @@ export default function ApiHubScreen() {
           loading={users.loading}
           error={users.error}
           onRefresh={users.reload}
+          animationIndex={2}
         >
           {users.data?.map((user) => (
             <View key={user.email} style={styles.personRow}>
@@ -224,6 +232,7 @@ export default function ApiHubScreen() {
           loading={weather.loading}
           error={weather.error}
           onRefresh={weather.reload}
+          animationIndex={3}
         >
           {weather.data ? (
             <Text style={styles.line}>
@@ -239,6 +248,7 @@ export default function ApiHubScreen() {
           loading={holidays.loading}
           error={holidays.error}
           onRefresh={holidays.reload}
+          animationIndex={4}
         >
           {holidays.data?.slice(0, 4).map((holiday) => (
             <View key={holiday.date + holiday.name} style={styles.actionRow}>
@@ -262,6 +272,7 @@ export default function ApiHubScreen() {
           loading={pokemon.loading}
           error={pokemon.error}
           onRefresh={pokemon.reload}
+          animationIndex={5}
         >
           {pokemon.data ? (
             <>
@@ -280,6 +291,7 @@ export default function ApiHubScreen() {
           loading={books.loading}
           error={books.error}
           onRefresh={books.reload}
+          animationIndex={6}
         >
           {books.data?.map((book) => (
             <View key={book.title} style={styles.actionRow}>
@@ -300,6 +312,7 @@ export default function ApiHubScreen() {
           loading={dog.loading}
           error={dog.error}
           onRefresh={dog.reload}
+          animationIndex={7}
         >
           {dog.data ? (
             <Image source={{ uri: dog.data }} style={styles.dogImage} />
@@ -312,6 +325,7 @@ export default function ApiHubScreen() {
           loading={cat.loading}
           error={cat.error}
           onRefresh={cat.reload}
+          animationIndex={8}
         >
           <Text style={styles.line}>{cat.data?.fact}</Text>
         </ApiWidgetCard>
@@ -322,6 +336,7 @@ export default function ApiHubScreen() {
           loading={advice.loading}
           error={advice.error}
           onRefresh={advice.reload}
+          animationIndex={9}
         >
           <Text style={styles.line}>{advice.data?.advice}</Text>
         </ApiWidgetCard>
@@ -332,6 +347,7 @@ export default function ApiHubScreen() {
           loading={joke.loading}
           error={joke.error}
           onRefresh={joke.reload}
+          animationIndex={10}
         >
           <Text style={styles.line}>{joke.data?.joke}</Text>
         </ApiWidgetCard>
@@ -345,6 +361,7 @@ export default function ApiHubScreen() {
             setShowAnswer(false);
             trivia.reload();
           }}
+          animationIndex={11}
         >
           {trivia.data ? (
             <>
@@ -381,6 +398,7 @@ export default function ApiHubScreen() {
           onAction={
             meal.data ? () => createMealTask(meal.data!.name) : undefined
           }
+          animationIndex={12}
         >
           {meal.data ? (
             <>
@@ -398,6 +416,7 @@ export default function ApiHubScreen() {
           loading={crypto.loading}
           error={crypto.error}
           onRefresh={crypto.reload}
+          animationIndex={13}
         >
           {crypto.data ? (
             <Text style={styles.line}>
@@ -413,6 +432,7 @@ export default function ApiHubScreen() {
           loading={iss.loading}
           error={iss.error}
           onRefresh={iss.reload}
+          animationIndex={14}
         >
           {iss.data ? (
             <Text style={styles.line}>
