@@ -2,6 +2,7 @@
   "expo": {
     "name": "PRITECH Task Manager",
     "slug": "pritech-task-manager",
+    "owner": "enisgjini20",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -38,6 +39,11 @@
         }
       ],
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6f1eed8a-f397-4659-b904-9dd506542eb5"
+      }
+    }
   }
 }

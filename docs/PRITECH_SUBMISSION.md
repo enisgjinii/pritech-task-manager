@@ -136,20 +136,26 @@ npm run check        # All of the above (except expo-doctor)
 
 ## 8. Build Artifacts
 
-Release builds are configured via EAS (`eas.json`):
+Release builds use **EAS Build** in the cloud — no local Java, Gradle, or Xcode required.
+
+Project: [expo.dev/accounts/enisgjini20/projects/pritech-task-manager](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager)
 
 ```bash
-# Android APK
-npm run build:android:apk
+# Start cloud builds (runs on Expo servers)
+npm run build:android:apk   # Android APK
+npm run build:ios:ipa       # iOS IPA (needs Apple Developer credentials in EAS)
 
-# iOS IPA (requires macOS + Apple signing or EAS credentials)
-npm run build:ios:ipa
+# After a build finishes, download artifacts into ./dist/
+npm run build:android:download
+npm run build:ios:download
 ```
 
-Output files are placed in `./dist/`:
+You can also download builds from the [EAS dashboard](https://expo.dev/accounts/enisgjini20/projects/pritech-task-manager/builds).
 
-- `pritech-task-manager.apk` — Android  
-- `pritech-task-manager.ipa` — iOS  
+Output files:
+
+- `dist/pritech-task-manager.apk` — Android  
+- `dist/pritech-task-manager.ipa` — iOS  
 
 ---
 
